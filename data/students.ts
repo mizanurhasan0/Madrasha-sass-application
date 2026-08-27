@@ -1,0 +1,78 @@
+import type { Student } from "@/types/student";
+import { MADRASA_ID } from "./users";
+
+const names = [
+  { name: "Yusuf Ahmed", nameBn: "ইউসুফ আহমেদ", gender: "male" as const },
+  { name: "Aisha Rahman", nameBn: "আয়েশা রহমান", gender: "female" as const },
+  { name: "Ibrahim Khan", nameBn: "ইbrahim খান", gender: "male" as const },
+  { name: "Fatima Akter", nameBn: "ফাতিমা আক্তার", gender: "female" as const },
+  { name: "Omar Faruk", nameBn: "ওমর ফারুক", gender: "male" as const },
+  { name: "Maryam Sultana", nameBn: "মরিয়ম সুলতানা", gender: "female" as const },
+  { name: "Hasan Mahmud", nameBn: "হাসan মahmud", gender: "male" as const },
+  { name: "Zainab Khatun", nameBn: "জainab খাতun", gender: "female" as const },
+  { name: "Abdullah Hossain", nameBn: "আbdullah হossain", gender: "male" as const },
+  { name: "Khadija Begum", nameBn: "খadija বegum", gender: "female" as const },
+  { name: "Hamza Ali", nameBn: "হamza আli", gender: "male" as const },
+  { name: "Safiya Rahman", nameBn: "সafiya রahman", gender: "female" as const },
+  { name: "Bilal Ahmed", nameBn: "বilal আhmed", gender: "male" as const },
+  { name: "Hafsa Islam", nameBn: "হafsa ইslam", gender: "female" as const },
+  { name: "Talha Khan", nameBn: "তalha খan", gender: "male" as const },
+  { name: "Noor Jahan", nameBn: "নur জahan", gender: "female" as const },
+  { name: "Saif Uddin", nameBn: "সaif উddin", gender: "male" as const },
+  { name: "Ruqayyah Akter", nameBn: "রuqayyah আkter", gender: "female" as const },
+  { name: "Musa Rahman", nameBn: "মusa রahman", gender: "male" as const },
+  { name: "Sumaiya Begum", nameBn: "সumaiya বegum", gender: "female" as const },
+  { name: "Harun Rashid", nameBn: "হarun রashid", gender: "male" as const },
+  { name: "Asma Khatun", nameBn: "আsma খatun", gender: "female" as const },
+  { name: "Idris Hossain", nameBn: "ইdris হossain", gender: "male" as const },
+  { name: "Layla Parvin", nameBn: "লayla পarvin", gender: "female" as const },
+];
+
+const classSectionPairs = [
+  { classId: "class_1", sectionId: "sec_1", guardianId: "guardian_1" },
+  { classId: "class_1", sectionId: "sec_1", guardianId: "guardian_1" },
+  { classId: "class_1", sectionId: "sec_2", guardianId: "guardian_2" },
+  { classId: "class_2", sectionId: "sec_3", guardianId: "guardian_3" },
+  { classId: "class_2", sectionId: "sec_3", guardianId: "guardian_3" },
+  { classId: "class_2", sectionId: "sec_4", guardianId: "guardian_4" },
+  { classId: "class_3", sectionId: "sec_5", guardianId: "guardian_5" },
+  { classId: "class_3", sectionId: "sec_5", guardianId: "guardian_6" },
+  { classId: "class_3", sectionId: "sec_6", guardianId: "guardian_7" },
+  { classId: "class_3", sectionId: "sec_6", guardianId: "guardian_7" },
+  { classId: "class_4", sectionId: "sec_7", guardianId: "guardian_8" },
+  { classId: "class_4", sectionId: "sec_10", guardianId: "guardian_2" },
+  { classId: "class_5", sectionId: "sec_8", guardianId: "guardian_4" },
+  { classId: "class_5", sectionId: "sec_8", guardianId: "guardian_5" },
+  { classId: "class_1", sectionId: "sec_2", guardianId: "guardian_6" },
+  { classId: "class_1", sectionId: "sec_1", guardianId: "guardian_3" },
+  { classId: "class_2", sectionId: "sec_4", guardianId: "guardian_7" },
+  { classId: "class_2", sectionId: "sec_3", guardianId: "guardian_8" },
+  { classId: "class_4", sectionId: "sec_7", guardianId: "guardian_1" },
+  { classId: "class_3", sectionId: "sec_5", guardianId: "guardian_5" },
+  { classId: "class_1", sectionId: "sec_1", guardianId: "guardian_4" },
+  { classId: "class_2", sectionId: "sec_4", guardianId: "guardian_2" },
+  { classId: "class_5", sectionId: "sec_8", guardianId: "guardian_6" },
+  { classId: "class_4", sectionId: "sec_7", guardianId: "guardian_7" },
+];
+
+const addresses = [
+  "Mirpur, Dhaka", "Uttara, Dhaka", "Gazipur", "Narayanganj",
+  "Mirpur DOHS, Dhaka", "Uttara Sector 7", "Gazipur Sadar", "Mirpur 10",
+];
+
+export const students: Student[] = names.map((n, i) => ({
+  id: `student_${i + 1}`,
+  studentId: `AN-${String(i + 1).padStart(4, "0")}`,
+  name: n.name,
+  nameBn: n.nameBn,
+  gender: n.gender,
+  dateOfBirth: `201${i % 5}-${String((i % 12) + 1).padStart(2, "0")}-15`,
+  bloodGroup: ["A+", "B+", "O+", "AB+"][i % 4],
+  address: addresses[i % addresses.length],
+  classId: classSectionPairs[i].classId,
+  sectionId: classSectionPairs[i].sectionId,
+  guardianId: classSectionPairs[i].guardianId,
+  admissionDate: `2024-${String((i % 12) + 1).padStart(2, "0")}-01`,
+  status: i === 23 ? "inactive" : "active",
+  madrasaId: MADRASA_ID,
+}));

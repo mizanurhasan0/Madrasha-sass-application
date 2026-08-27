@@ -1,0 +1,64 @@
+/**
+ * MadrasaMS brand tokens + shadcn semantic mapping
+ */
+
+:root {
+  --brand-green: oklch(0.38 0.1 148);
+  --brand-deep: oklch(0.26 0.05 165);
+  --brand-lime: oklch(0.87 0.16 118);
+  --brand-sand: oklch(0.97 0.02 110);
+  --brand-star: oklch(0.79 0.15 75);
+  --brand-heading: oklch(0.22 0.02 145);
+
+  --background: oklch(0.995 0.004 110);
+  --foreground: var(--brand-heading);
+  --card: oklch(1 0.003 110);
+  --card-foreground: var(--brand-heading);
+  --popover: oklch(1 0.003 110);
+  --popover-foreground: var(--brand-heading);
+  --primary: var(--brand-green);
+  --primary-foreground: oklch(1 0 0);
+  --secondary: var(--brand-sand);
+  --secondary-foreground: var(--brand-deep);
+  --muted: var(--brand-sand);
+  --muted-foreground: oklch(0.45 0.03 145);
+  --accent: var(--brand-lime);
+  --accent-foreground: var(--brand-deep);
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: oklch(0.92 0.01 110);
+  --input: oklch(0.92 0.01 110);
+  --ring: var(--brand-green);
+  --gold: var(--brand-star);
+  --lime: var(--brand-lime);
+  --deep: var(--brand-deep);
+  --sand: var(--brand-sand);
+  --star: var(--brand-star);
+  --radius: 1.25rem;
+  --shadow-soft: 0px 10px 60px 0px rgba(0, 0, 0, 0.05);
+
+  --sidebar: var(--brand-sand);
+  --sidebar-foreground: var(--brand-deep);
+  --sidebar-primary: var(--brand-green);
+  --sidebar-primary-foreground: oklch(1 0 0);
+  --sidebar-accent: var(--brand-lime);
+  --sidebar-accent-foreground: var(--brand-deep);
+  --sidebar-border: oklch(0.92 0.01 110);
+  --sidebar-ring: var(--brand-green);
+  --chart-1: var(--brand-green);
+  --chart-2: oklch(0.42 0.12 148);
+  --chart-3: oklch(0.5 0.14 148);
+  --chart-4: var(--brand-star);
+  --chart-5: oklch(0.55 0.12 130);
+}
+
+.dark {
+  --background: var(--brand-deep);
+  --foreground: oklch(0.98 0.01 110);
+  --card: oklch(0.28 0.04 165);
+  --card-foreground: oklch(0.98 0.01 110);
+  --primary: var(--brand-lime);
+  --primary-foreground: var(--brand-deep);
+  --muted: oklch(0.28 0.04 165);
+  --muted-foreground: oklch(0.75 0.02 110);
+  --border: oklch(1 0 0 / 10%);
+}

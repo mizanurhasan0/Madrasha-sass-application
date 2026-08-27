@@ -1,0 +1,26 @@
+import type { Teacher, Staff } from "@/types/teacher";
+import { MADRASA_ID } from "./users";
+
+export const teachers: Teacher[] = [
+  { id: "teacher_1", name: "Sheikh Nurul Islam", email: "teacher@example.com", phone: "01733333333", designation: "Senior Hifz Teacher", subjects: ["Quran & Tajweed", "Nazera Practice"], classIds: ["class_1", "class_3"], joiningDate: "2020-03-01", address: "Mirpur, Dhaka", bio: "15 years of experience in Quranic education.", status: "active", madrasaId: MADRASA_ID },
+  { id: "teacher_2", name: "Maulana Abdul Qadir", email: "qadir@alnoor.edu.bd", phone: "01733444444", designation: "Hadith Teacher", subjects: ["Hadith", "Tafsir"], classIds: ["class_2"], joiningDate: "2019-06-15", address: "Uttara, Dhaka", bio: "Graduate of Darul Uloom Deoband.", status: "active", madrasaId: MADRASA_ID },
+  { id: "teacher_3", name: "Maulana Rashid Ahmed", email: "rashid@alnoor.edu.bd", phone: "01733555555", designation: "Fiqh Teacher", subjects: ["Fiqh", "Seerah"], classIds: ["class_3"], joiningDate: "2021-01-10", address: "Gazipur", bio: "Specialist in Hanafi Fiqh.", status: "active", madrasaId: MADRASA_ID },
+  { id: "teacher_4", name: "Dr. Kamal Hassan", email: "kamal@alnoor.edu.bd", phone: "01733666666", designation: "Arabic Language Teacher", subjects: ["Arabic Grammar"], classIds: ["class_6"], joiningDate: "2018-08-20", address: "Dhaka", bio: "PhD in Arabic Literature.", status: "active", madrasaId: MADRASA_ID },
+  { id: "teacher_5", name: "Nasima Akter", email: "nasima@alnoor.edu.bd", phone: "01733777777", designation: "Bangla Teacher", subjects: ["Bangla"], classIds: ["class_4"], joiningDate: "2022-02-01", address: "Mirpur", bio: "M.A. in Bangla Literature.", status: "active", madrasaId: MADRASA_ID },
+  { id: "teacher_6", name: "James Wilson", email: "james@alnoor.edu.bd", phone: "01733888888", designation: "English Teacher", subjects: ["English"], classIds: ["class_4", "class_5"], joiningDate: "2020-09-01", address: "Uttara", bio: "Cambridge certified English instructor.", status: "active", madrasaId: MADRASA_ID },
+  { id: "teacher_7", name: "Rafiqul Islam", email: "rafiq@alnoor.edu.bd", phone: "01733999999", designation: "Mathematics Teacher", subjects: ["Mathematics"], classIds: ["class_5"], joiningDate: "2019-04-15", address: "Narayanganj", bio: "B.Sc in Mathematics.", status: "active", madrasaId: MADRASA_ID },
+  { id: "teacher_8", name: "Shahana Parvin", email: "shahana@alnoor.edu.bd", phone: "01734000000", designation: "Islamic Studies Teacher", subjects: ["Islamic Studies"], classIds: ["class_5"], joiningDate: "2021-07-01", address: "Gazipur", bio: "Expert in Islamic history and culture.", status: "active", madrasaId: MADRASA_ID },
+  { id: "teacher_9", name: "Maulana Tariq Mahmud", email: "tariq@alnoor.edu.bd", phone: "01734111111", designation: "Tafsir Teacher", subjects: ["Tafsir"], classIds: ["class_2"], joiningDate: "2017-11-20", address: "Dhaka", bio: "Specialist in Tafsir Ibn Kathir.", status: "active", madrasaId: MADRASA_ID },
+  { id: "teacher_10", name: "Abdus Salam", email: "salam@alnoor.edu.bd", phone: "01734222222", designation: "Aqeedah Teacher", subjects: ["Aqeedah"], classIds: ["class_1"], joiningDate: "2023-01-05", address: "Mirpur", bio: "Graduate of Al-Azhar University.", status: "active", madrasaId: MADRASA_ID },
+  { id: "teacher_11", name: "Hafiz Abdullah", email: "hafiz@alnoor.edu.bd", phone: "01734333333", designation: "Hifz Supervisor", subjects: ["Quran & Tajweed"], classIds: ["class_1", "class_2"], joiningDate: "2016-05-10", address: "Uttara", bio: "Completed Hifz at age 12.", status: "active", madrasaId: MADRASA_ID },
+  { id: "teacher_12", name: "Maulana Farid Uddin", email: "farid@alnoor.edu.bd", phone: "01734444444", designation: "Assistant Teacher", subjects: ["Seerah"], classIds: ["class_3"], joiningDate: "2024-03-01", address: "Gazipur", bio: "Young and enthusiastic educator.", status: "active", madrasaId: MADRASA_ID },
+];
+
+export const staffMembers: Staff[] = [
+  { id: "staff_1", name: "Mohammad Karim", email: "madrasa@example.com", phone: "01722222222", designation: "Principal", department: "Administration", joiningDate: "2015-01-01", status: "active", madrasaId: MADRASA_ID },
+  { id: "staff_2", name: "Fatima Begum", email: "accountant@example.com", phone: "01744444444", designation: "Accountant", department: "Finance", joiningDate: "2018-06-01", status: "active", madrasaId: MADRASA_ID },
+  { id: "staff_3", name: "Abdul Jabbar", email: "jabbar@alnoor.edu.bd", phone: "01734555555", designation: "Office Assistant", department: "Administration", joiningDate: "2020-02-15", status: "active", madrasaId: MADRASA_ID },
+  { id: "staff_4", name: "Rashida Khatun", email: "rashida@alnoor.edu.bd", phone: "01734666666", designation: "Librarian", department: "Library", joiningDate: "2019-09-01", status: "active", madrasaId: MADRASA_ID },
+  { id: "staff_5", name: "Imran Ali", email: "imran@alnoor.edu.bd", phone: "01734777777", designation: "IT Support", department: "Technology", joiningDate: "2022-04-01", status: "active", madrasaId: MADRASA_ID },
+  { id: "staff_6", name: "Salma Akter", email: "salma@alnoor.edu.bd", phone: "01734888888", designation: "Receptionist", department: "Administration", joiningDate: "2021-08-15", status: "inactive", madrasaId: MADRASA_ID },
+];
