@@ -1,13 +1,12 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { ClipboardList, TrendingUp, Wallet } from "lucide-react";
 import { PageHeader } from "@/components/common/page-header";
-import { StatCard } from "@/components/common/stat-card";
 import { DataTable, type Column } from "@/components/common/data-table";
 import { StatusBadge } from "@/components/common/status-badge";
 import { Money, DateDisplay } from "@/components/common/format-display";
 import { CardSkeleton, TableSkeleton } from "@/components/common/loading-state";
+import { FeeStatsGrid } from "@/components/fees/fee-stats-grid";
 import { feeService } from "@/services/fee.service";
 import { studentService } from "@/services/student.service";
 import type { Payment } from "@/types/fee";
@@ -94,32 +93,7 @@ export function AccountantDashboard() {
         description="Fee collection overview and recent payment activity."
       />
 
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <StatCard
-          title="Total Collection"
-          value={stats.totalCollection}
-          isCurrency
-          icon={<Wallet className="size-5" />}
-        />
-        <StatCard
-          title="Total Due"
-          value={stats.totalDue}
-          isCurrency
-          icon={<ClipboardList className="size-5" />}
-        />
-        <StatCard
-          title="Today's Collection"
-          value={stats.todayCollection}
-          isCurrency
-          icon={<TrendingUp className="size-5" />}
-        />
-        <StatCard
-          title="Monthly Collection"
-          value={stats.monthlyCollection}
-          isCurrency
-          icon={<Wallet className="size-5" />}
-        />
-      </div>
+      <FeeStatsGrid stats={stats} />
 
       <div className="space-y-3">
         <h2 className="text-lg font-semibold">Recent Payments</h2>

@@ -6,6 +6,7 @@ import { useAuth } from "@/lib/auth/auth-provider";
 import { PageHeader } from "@/components/common/page-header";
 import { StatCard } from "@/components/common/stat-card";
 import { StatusBadge } from "@/components/common/status-badge";
+import { AttendanceStatGrid } from "@/components/common/attendance-stat-grid";
 import { EmptyState } from "@/components/common/empty-state";
 import { DateDisplay } from "@/components/common/format-display";
 import { CardSkeleton } from "@/components/common/loading-state";
@@ -171,24 +172,7 @@ export function TeacherDashboard() {
 
         <div className="rounded-xl border bg-card p-5 shadow-sm">
           <h3 className="mb-4 font-semibold">{t("dashboard.attendanceSummary")}</h3>
-          <div className="grid grid-cols-2 gap-3 text-sm">
-            <div className="rounded-lg bg-emerald-50 p-3 dark:bg-emerald-950/30">
-              <p className="text-muted-foreground">{t("status.present")}</p>
-              <p className="text-xl font-bold text-emerald-600">{attendance.present}</p>
-            </div>
-            <div className="rounded-lg bg-red-50 p-3 dark:bg-red-950/30">
-              <p className="text-muted-foreground">{t("status.absent")}</p>
-              <p className="text-xl font-bold text-red-600">{attendance.absent}</p>
-            </div>
-            <div className="rounded-lg bg-amber-50 p-3 dark:bg-amber-950/30">
-              <p className="text-muted-foreground">{t("status.late")}</p>
-              <p className="text-xl font-bold text-amber-600">{attendance.late}</p>
-            </div>
-            <div className="rounded-lg bg-blue-50 p-3 dark:bg-blue-950/30">
-              <p className="text-muted-foreground">{t("status.leave")}</p>
-              <p className="text-xl font-bold text-blue-600">{attendance.leave}</p>
-            </div>
-          </div>
+          <AttendanceStatGrid attendance={attendance} />
         </div>
       </div>
 

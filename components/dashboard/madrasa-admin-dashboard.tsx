@@ -12,6 +12,7 @@ import {
 import { PageHeader } from "@/components/common/page-header";
 import { StatCard } from "@/components/common/stat-card";
 import { ChartCard } from "@/components/common/chart-card";
+import { AttendanceStatGrid } from "@/components/common/attendance-stat-grid";
 import { DataTable, type Column } from "@/components/common/data-table";
 import { StatusBadge } from "@/components/common/status-badge";
 import { Money, DateDisplay } from "@/components/common/format-display";
@@ -203,24 +204,7 @@ export function MadrasaAdminDashboard() {
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
         <div className="rounded-xl border bg-card p-5 shadow-sm">
           <h3 className="mb-4 font-semibold">Today&apos;s Attendance</h3>
-          <div className="grid grid-cols-2 gap-3 text-sm">
-            <div className="rounded-lg bg-emerald-50 p-3 dark:bg-emerald-950/30">
-              <p className="text-muted-foreground">Present</p>
-              <p className="text-xl font-bold text-emerald-600">{attendance.present}</p>
-            </div>
-            <div className="rounded-lg bg-red-50 p-3 dark:bg-red-950/30">
-              <p className="text-muted-foreground">Absent</p>
-              <p className="text-xl font-bold text-red-600">{attendance.absent}</p>
-            </div>
-            <div className="rounded-lg bg-amber-50 p-3 dark:bg-amber-950/30">
-              <p className="text-muted-foreground">Late</p>
-              <p className="text-xl font-bold text-amber-600">{attendance.late}</p>
-            </div>
-            <div className="rounded-lg bg-blue-50 p-3 dark:bg-blue-950/30">
-              <p className="text-muted-foreground">Leave</p>
-              <p className="text-xl font-bold text-blue-600">{attendance.leave}</p>
-            </div>
-          </div>
+          <AttendanceStatGrid attendance={attendance} />
         </div>
 
         <div className="space-y-3">

@@ -1,8 +1,13 @@
 /**
- * MadrasaMS brand tokens + shadcn semantic mapping
+ * MadrasaMS design tokens — single source of truth
+ * Layer 1: Primitive brand colors (tenant-overridable via inline style on <html>)
+ * Layer 2: Semantic UI tokens
+ * Layer 3: Status tokens
+ * Layer 4: Islamus bridge aliases
  */
 
 :root {
+  /* ── Layer 1: Primitives ── */
   --brand-green: oklch(0.38 0.1 148);
   --brand-deep: oklch(0.26 0.05 165);
   --brand-lime: oklch(0.87 0.16 118);
@@ -10,6 +15,7 @@
   --brand-star: oklch(0.79 0.15 75);
   --brand-heading: oklch(0.22 0.02 145);
 
+  /* ── Layer 2: Semantic ── */
   --background: oklch(0.995 0.004 110);
   --foreground: var(--brand-heading);
   --card: oklch(1 0.003 110);
@@ -25,6 +31,7 @@
   --accent: var(--brand-lime);
   --accent-foreground: var(--brand-deep);
   --destructive: oklch(0.577 0.245 27.325);
+  --destructive-foreground: oklch(1 0 0);
   --border: oklch(0.92 0.01 110);
   --input: oklch(0.92 0.01 110);
   --ring: var(--brand-green);
@@ -44,11 +51,55 @@
   --sidebar-accent-foreground: var(--brand-deep);
   --sidebar-border: oklch(0.92 0.01 110);
   --sidebar-ring: var(--brand-green);
+
   --chart-1: var(--brand-green);
   --chart-2: oklch(0.42 0.12 148);
   --chart-3: oklch(0.5 0.14 148);
   --chart-4: var(--brand-star);
   --chart-5: oklch(0.55 0.12 130);
+
+  /* ── Layer 3: Status ── */
+  --status-success: oklch(0.55 0.15 145);
+  --status-success-fg: oklch(0.35 0.12 145);
+  --status-success-bg: oklch(0.55 0.15 145 / 0.12);
+
+  --status-warning: oklch(0.72 0.16 75);
+  --status-warning-fg: oklch(0.45 0.14 75);
+  --status-warning-bg: oklch(0.72 0.16 75 / 0.14);
+
+  --status-danger: oklch(0.55 0.2 25);
+  --status-danger-fg: oklch(0.42 0.18 25);
+  --status-danger-bg: oklch(0.55 0.2 25 / 0.12);
+
+  --status-info: oklch(0.52 0.14 250);
+  --status-info-fg: oklch(0.38 0.12 250);
+  --status-info-bg: oklch(0.52 0.14 250 / 0.12);
+
+  --status-neutral: oklch(0.55 0.02 145);
+  --status-neutral-fg: oklch(0.42 0.02 145);
+  --status-neutral-bg: oklch(0.55 0.02 145 / 0.1);
+
+  /* ── Layer 4: Islamus bridge + shared surface tokens ── */
+  --theme-color1: var(--brand-lime);
+  --theme-color2: var(--brand-deep);
+  --theme-color3: var(--brand-green);
+  --theme-color-white: var(--card);
+  --theme-color-gray: var(--muted);
+  --headings-color: var(--foreground);
+  --text-color: var(--muted-foreground);
+  --body-font-family: var(--font-sans);
+  --heading-font-family: var(--font-heading);
+
+  --overlay-deep-start: color-mix(in oklch, var(--brand-deep) 30%, transparent);
+  --overlay-deep-end: color-mix(in oklch, var(--brand-deep) 85%, transparent);
+  --overlay-deep-strong: color-mix(in oklch, var(--brand-deep) 90%, transparent);
+  --overlay-primary-fade: color-mix(in oklch, var(--brand-green) 0%, transparent);
+  --overlay-primary-end: var(--brand-deep);
+  --border-subtle: var(--border);
+  --border-faint-white: oklch(1 0 0 / 0.3);
+  --text-on-dark-muted: oklch(1 0 0 / 0.7);
+  --surface-glass: oklch(1 0 0 / 0.3);
+  --shadow-card: var(--shadow-soft);
 }
 
 .dark {
@@ -56,9 +107,62 @@
   --foreground: oklch(0.98 0.01 110);
   --card: oklch(0.28 0.04 165);
   --card-foreground: oklch(0.98 0.01 110);
+  --popover: oklch(0.28 0.04 165);
+  --popover-foreground: oklch(0.98 0.01 110);
   --primary: var(--brand-lime);
   --primary-foreground: var(--brand-deep);
+  --secondary: oklch(0.32 0.04 165);
+  --secondary-foreground: oklch(0.98 0.01 110);
   --muted: oklch(0.28 0.04 165);
   --muted-foreground: oklch(0.75 0.02 110);
+  --accent: oklch(0.35 0.06 148);
+  --accent-foreground: var(--brand-lime);
+  --destructive: oklch(0.65 0.2 25);
+  --destructive-foreground: oklch(0.98 0.01 110);
   --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 12%);
+  --ring: var(--brand-lime);
+
+  --sidebar: oklch(0.24 0.04 165);
+  --sidebar-foreground: oklch(0.98 0.01 110);
+  --sidebar-primary: var(--brand-lime);
+  --sidebar-primary-foreground: var(--brand-deep);
+  --sidebar-accent: oklch(0.32 0.05 148);
+  --sidebar-accent-foreground: oklch(0.98 0.01 110);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: var(--brand-lime);
+
+  --chart-1: var(--brand-lime);
+  --chart-2: oklch(0.65 0.12 148);
+  --chart-3: oklch(0.58 0.1 148);
+  --chart-4: var(--brand-star);
+  --chart-5: oklch(0.62 0.1 130);
+
+  --status-success: oklch(0.72 0.14 145);
+  --status-success-fg: oklch(0.82 0.1 145);
+  --status-success-bg: oklch(0.72 0.14 145 / 0.18);
+
+  --status-warning: oklch(0.78 0.14 75);
+  --status-warning-fg: oklch(0.88 0.1 75);
+  --status-warning-bg: oklch(0.78 0.14 75 / 0.18);
+
+  --status-danger: oklch(0.68 0.18 25);
+  --status-danger-fg: oklch(0.85 0.12 25);
+  --status-danger-bg: oklch(0.68 0.18 25 / 0.18);
+
+  --status-info: oklch(0.68 0.12 250);
+  --status-info-fg: oklch(0.85 0.08 250);
+  --status-info-bg: oklch(0.68 0.12 250 / 0.18);
+
+  --status-neutral: oklch(0.65 0.02 145);
+  --status-neutral-fg: oklch(0.82 0.02 145);
+  --status-neutral-bg: oklch(0.65 0.02 145 / 0.16);
+
+  --theme-color-white: var(--card);
+  --theme-color-gray: var(--muted);
+  --headings-color: var(--foreground);
+  --text-color: var(--muted-foreground);
+
+  --shadow-soft: 0px 10px 60px 0px rgba(0, 0, 0, 0.25);
+  --shadow-card: var(--shadow-soft);
 }

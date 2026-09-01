@@ -7,6 +7,7 @@ import { toast } from "sonner";
 import { useAuth } from "@/lib/auth/auth-provider";
 import { PageHeader } from "@/components/common/page-header";
 import { StatusBadge } from "@/components/common/status-badge";
+import { BrandThemePicker } from "@/components/settings/brand-theme-picker";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -255,7 +256,7 @@ export function SettingsContent() {
               <CardTitle>Appearance</CardTitle>
               <CardDescription>Customize the dashboard theme.</CardDescription>
             </CardHeader>
-            <CardContent className="space-y-4">
+            <CardContent className="space-y-6">
               <div className="grid gap-3 sm:grid-cols-3">
                 {themeOptions.map((option) => (
                   <button
@@ -276,6 +277,10 @@ export function SettingsContent() {
               <p className="text-xs text-muted-foreground">
                 Theme preference is saved in your browser and applies across the dashboard.
               </p>
+
+              <div className="border-t pt-6">
+                <BrandThemePicker initialTheme={madrasa.theme} />
+              </div>
             </CardContent>
           </Card>
         </TabsContent>

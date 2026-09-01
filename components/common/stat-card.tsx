@@ -1,5 +1,6 @@
 import { cn } from "@/lib/utils";
 import { formatCurrency } from "@/lib/format";
+import { Card, CardContent } from "@/components/ui/card";
 
 type StatCardProps = {
   title: string;
@@ -28,35 +29,32 @@ export function StatCard({
       : value;
 
   return (
-    <div
-      className={cn(
-        "rounded-xl border bg-card p-5 shadow-sm transition-shadow hover:shadow-md",
-        className
-      )}
-    >
-      <div className="flex items-start justify-between">
-        <div className="space-y-1">
-          <p className="text-sm font-medium text-muted-foreground">{title}</p>
-          <p className="text-2xl font-bold tracking-tight">{displayValue}</p>
-          {description && (
-            <p className="text-xs text-muted-foreground">{description}</p>
-          )}
-          {trend && (
-            <p
-              className={cn(
-                "text-xs font-medium",
-                trend.value >= 0 ? "text-emerald-600" : "text-red-600"
-              )}
-            >
-              {trend.value >= 0 ? "+" : ""}
-              {trend.value}% {trend.label}
-            </p>
+    <Card className={cn("shadow-sm transition-shadow hover:shadow-md", className)}>
+      <CardContent>
+        <div className="flex items-start justify-between">
+          <div className="space-y-1">
+            <p className="text-sm font-medium text-muted-foreground">{title}</p>
+            <p className="text-2xl font-bold tracking-tight">{displayValue}</p>
+            {description && (
+              <p className="text-xs text-muted-foreground">{description}</p>
+            )}
+            {trend && (
+              <p
+                className={cn(
+                  "text-xs font-medium",
+                  trend.value >= 0 ? "text-status-success-fg" : "text-status-danger-fg"
+                )}
+              >
+                {trend.value >= 0 ? "+" : ""}
+                {trend.value}% {trend.label}
+              </p>
+            )}
+          </div>
+          {icon && (
+            <div className="rounded-lg bg-primary/10 p-2.5 text-primary">{icon}</div>
           )}
         </div>
-        {icon && (
-          <div className="rounded-lg bg-primary/10 p-2.5 text-primary">{icon}</div>
-        )}
-      </div>
-    </div>
+      </CardContent>
+    </Card>
   );
 }

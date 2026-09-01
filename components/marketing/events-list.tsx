@@ -5,12 +5,11 @@ import Image from "next/image";
 import { Calendar, Clock, MapPin } from "lucide-react";
 import type { Event } from "@/types/notice";
 import { EmptyState } from "@/components/common/empty-state";
-import { Badge } from "@/components/ui/badge";
+import { StatusBadge } from "@/components/common/status-badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { formatDate, getStatusColor } from "@/lib/format";
+import { formatDate } from "@/lib/format";
 import { useT } from "@/lib/i18n/locale-provider";
-import { cn } from "@/lib/utils";
 import { Reveal, wowStaggerDelay } from "./reveal";
 
 type EventsListProps = {
@@ -61,7 +60,7 @@ export function EventsList({ events }: EventsListProps) {
               )}
               <CardHeader>
                 <div className="flex items-center justify-between gap-2">
-                  <Badge className={cn(getStatusColor(event.status))}>{event.status}</Badge>
+                  <StatusBadge status={event.status} />
                 </div>
                 <CardTitle className="text-lg">{event.title}</CardTitle>
                 <CardDescription>{event.description}</CardDescription>

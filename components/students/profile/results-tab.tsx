@@ -2,6 +2,7 @@
 
 import { StatusBadge } from "@/components/common/status-badge";
 import { EmptyState } from "@/components/common/empty-state";
+import { SimpleTable } from "@/components/common/simple-table";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useT } from "@/lib/i18n/locale-provider";
 import type { StudentResult } from "@/types/exam";
@@ -51,28 +52,27 @@ export function ResultsTab({ results }: ResultsTabProps) {
                 Average: <strong>{result.average.toFixed(1)}%</strong>
               </span>
             </div>
-            <div className="overflow-x-auto rounded-lg border">
-              <table className="w-full text-sm">
-                <thead>
-                  <tr className="border-b bg-muted/50">
-                    <th className="px-4 py-2 text-left font-medium">Subject</th>
-                    <th className="px-4 py-2 text-right font-medium">Marks</th>
-                    <th className="px-4 py-2 text-right font-medium">Grade</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {result.subjects.map((sub) => (
-                    <tr key={sub.subjectName} className="border-b last:border-0">
-                      <td className="px-4 py-2">{sub.subjectName}</td>
-                      <td className="px-4 py-2 text-right tabular-nums">
-                        {sub.obtainedMarks} / {sub.totalMarks}
-                      </td>
-                      <td className="px-4 py-2 text-right font-medium">{sub.grade}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+            <SimpleTable
+              data={result.subjects}
+              getRowKey={(sub) => sub.subjectName}
+              className="rounded-lg"
+              columns={[
+                { key: "subject", header: "Subject", cell: (sub) => sub.subjectName },
+                {
+                  key: "marks",
+                  header: "Marks",
+                  align: "right",
+                  cell: (sub) => `${sub.obtainedMarks} / ${sub.totalMarks}`,
+                  cellClassName: "tabular-nums",
+                },
+                {
+                  key: "grade",
+                  header: "Grade",
+                  align: "right",
+                  cell: (sub) => <span className="font-medium">{sub.grade}</span>,
+                },
+              ]}
+            />
           </CardContent>
         </Card>
       ))}

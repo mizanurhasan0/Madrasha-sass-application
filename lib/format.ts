@@ -77,25 +77,4 @@ export function calculateGrade(percentage: number): string {
   return "F";
 }
 
-export function getStatusColor(status: string): string {
-  const map: Record<string, string> = {
-    active: "bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-400",
-    inactive: "bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400",
-    pending: "bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-400",
-    suspended: "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400",
-    present: "bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-400",
-    absent: "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400",
-    late: "bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-400",
-    leave: "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400",
-    paid: "bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-400",
-    partial: "bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-400",
-    due: "bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-400",
-    overdue: "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400",
-    pass: "bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-400",
-    fail: "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400",
-    upcoming: "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400",
-    ongoing: "bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-400",
-    completed: "bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-400",
-  };
-  return map[status] ?? "bg-gray-100 text-gray-600";
-}
+export { getStatusVariant } from "@/lib/theme/status";

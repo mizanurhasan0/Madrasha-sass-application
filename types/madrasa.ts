@@ -1,5 +1,13 @@
 import type { Status } from "./common";
 
+export type MadrasaTheme = {
+  primary: string;
+  accent: string;
+  deep: string;
+  radius?: string;
+  logoUrl?: string;
+};
+
 export type Madrasa = {
   id: string;
   name: string;
@@ -13,6 +21,7 @@ export type Madrasa = {
   planId: string;
   status: Status;
   joinedAt: string;
+  theme?: MadrasaTheme;
 };
 
 export type SubscriptionPlan = {

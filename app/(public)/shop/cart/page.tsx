@@ -32,7 +32,7 @@ export default function CartPage() {
                         <button type="button" className="px-2 py-1 border rounded" onClick={() => updateQty(item.slug, item.qty - 1)}>-</button>
                         <span>{item.qty}</span>
                         <button type="button" className="px-2 py-1 border rounded" onClick={() => updateQty(item.slug, item.qty + 1)}>+</button>
-                        <button type="button" className="ml-4 text-sm text-red-600" onClick={() => removeItem(item.slug)}>Remove</button>
+                        <button type="button" className="ml-4 text-sm text-status-danger-fg" onClick={() => removeItem(item.slug)}>Remove</button>
                       </div>
                     </div>
                     <p className="font-semibold">${item.price * item.qty}</p>

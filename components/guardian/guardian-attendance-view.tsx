@@ -9,6 +9,7 @@ import { EmptyState } from "@/components/common/empty-state";
 import { StatCard } from "@/components/common/stat-card";
 import { StatusBadge } from "@/components/common/status-badge";
 import { DateDisplay } from "@/components/common/format-display";
+import { SimpleTable } from "@/components/common/simple-table";
 import { CardSkeleton } from "@/components/common/loading-state";
 import {
   Select,
@@ -161,26 +162,23 @@ export function GuardianAttendanceView() {
           ) : (
             <div className="rounded-xl border bg-card">
               <div className="hidden md:block">
-                <table className="w-full text-sm">
-                  <thead>
-                    <tr className="border-b text-left text-muted-foreground">
-                      <th className="px-4 py-3 font-medium">Date</th>
-                      <th className="px-4 py-3 font-medium">Status</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {records.map((record) => (
-                      <tr key={record.id} className="border-b last:border-0">
-                        <td className="px-4 py-3">
-                          <DateDisplay date={record.date} />
-                        </td>
-                        <td className="px-4 py-3">
-                          <StatusBadge status={record.status} />
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+                <SimpleTable
+                  data={records}
+                  getRowKey={(record) => record.id}
+                  className="rounded-none border-0"
+                  columns={[
+                    {
+                      key: "date",
+                      header: "Date",
+                      cell: (record) => <DateDisplay date={record.date} />,
+                    },
+                    {
+                      key: "status",
+                      header: "Status",
+                      cell: (record) => <StatusBadge status={record.status} />,
+                    },
+                  ]}
+                />
               </div>
               <div className="space-y-2 p-4 md:hidden">
                 {records.map((record) => (

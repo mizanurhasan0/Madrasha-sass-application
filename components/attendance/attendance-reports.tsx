@@ -10,6 +10,7 @@ import { BarSeriesChart } from "@/components/charts/chart-wrappers";
 import { attendanceService } from "@/services/attendance.service";
 import { academicService } from "@/services/academic.service";
 import type { Class } from "@/types/academic";
+import { SimpleTable } from "@/components/common/simple-table";
 import { Users, UserCheck, UserX, Clock, CalendarOff } from "lucide-react";
 
 type DailySummary = {
@@ -114,28 +115,38 @@ export function AttendanceReports() {
         )}
       </ChartCard>
 
-      <div className="overflow-hidden rounded-xl border">
-        <table className="w-full text-sm">
-          <thead className="border-b bg-muted/40">
-            <tr>
-              <th className="px-4 py-3 text-left font-medium">Class</th>
-              <th className="px-4 py-3 text-right font-medium">Present</th>
-              <th className="px-4 py-3 text-right font-medium">Total</th>
-              <th className="px-4 py-3 text-right font-medium">Percentage</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y">
-            {classPercentages.map((row) => (
-              <tr key={row.className}>
-                <td className="px-4 py-3 font-medium">{row.className}</td>
-                <td className="px-4 py-3 text-right tabular-nums">{row.present}</td>
-                <td className="px-4 py-3 text-right tabular-nums">{row.total}</td>
-                <td className="px-4 py-3 text-right tabular-nums">{row.percentage}%</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+      <SimpleTable
+        data={classPercentages}
+        getRowKey={(row) => row.className}
+        columns={[
+          {
+            key: "class",
+            header: "Class",
+            cell: (row) => <span className="font-medium">{row.className}</span>,
+          },
+          {
+            key: "present",
+            header: "Present",
+            align: "right",
+            cell: (row) => row.present,
+            cellClassName: "tabular-nums",
+          },
+          {
+            key: "total",
+            header: "Total",
+            align: "right",
+            cell: (row) => row.total,
+            cellClassName: "tabular-nums",
+          },
+          {
+            key: "percentage",
+            header: "Percentage",
+            align: "right",
+            cell: (row) => `${row.percentage}%`,
+            cellClassName: "tabular-nums",
+          },
+        ]}
+      />
     </div>
   );
 }

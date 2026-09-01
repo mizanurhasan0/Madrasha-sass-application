@@ -3,6 +3,11 @@
 import { forwardRef } from "react";
 import { siteConfig } from "@/config/site";
 import { StatusBadge } from "@/components/common/status-badge";
+import {
+  SimpleTable,
+  type SimpleTableColumn,
+} from "@/components/common/simple-table";
+import { TableCell, TableRow } from "@/components/ui/table";
 import type { StudentResult } from "@/types/exam";
 
 type ResultCardProps = {
@@ -12,6 +17,30 @@ type ResultCardProps = {
   className?: string;
 };
 
+const subjectColumns: SimpleTableColumn<StudentResult["subjects"][number]>[] = [
+  { key: "subject", header: "Subject", cell: (subject) => subject.subjectName },
+  {
+    key: "obtained",
+    header: "Obtained",
+    align: "center",
+    cell: (subject) => subject.obtainedMarks,
+    cellClassName: "tabular-nums",
+  },
+  {
+    key: "total",
+    header: "Total",
+    align: "center",
+    cell: (subject) => subject.totalMarks,
+    cellClassName: "tabular-nums",
+  },
+  {
+    key: "grade",
+    header: "Grade",
+    align: "center",
+    cell: (subject) => <span className="font-medium">{subject.grade}</span>,
+  },
+];
+
 export const ResultCard = forwardRef<HTMLDivElement, ResultCardProps>(
   function ResultCard({ result, studentName, studentId, className }, ref) {
     return (
@@ -19,8 +48,8 @@ export const ResultCard = forwardRef<HTMLDivElement, ResultCardProps>(
         ref={ref}
         className={`result-card mx-auto max-w-2xl rounded-xl border bg-card p-8 shadow-sm print:border-0 print:shadow-none ${className ?? ""}`}
       >
-        <div className="border-b border-emerald-200 pb-6 text-center dark:border-emerald-800">
-          <p className="text-xs font-medium uppercase tracking-widest text-emerald-600">
+        <div className="border-b border-primary/20 pb-6 text-center">
+          <p className="text-xs font-medium uppercase tracking-widest text-primary">
             {siteConfig.madrasaName}
           </p>
           <h2 className="mt-2 text-2xl font-bold">Examination Result</h2>
@@ -48,39 +77,25 @@ export const ResultCard = forwardRef<HTMLDivElement, ResultCardProps>(
           </div>
         </div>
 
-        <div className="mt-6 overflow-hidden rounded-lg border">
-          <table className="w-full text-sm">
-            <thead>
-              <tr className="border-b bg-muted/50">
-                <th className="px-4 py-2.5 text-left font-medium">Subject</th>
-                <th className="px-4 py-2.5 text-center font-medium">Obtained</th>
-                <th className="px-4 py-2.5 text-center font-medium">Total</th>
-                <th className="px-4 py-2.5 text-center font-medium">Grade</th>
-              </tr>
-            </thead>
-            <tbody>
-              {result.subjects.map((subject) => (
-                <tr key={subject.subjectName} className="border-b last:border-0">
-                  <td className="px-4 py-2.5">{subject.subjectName}</td>
-                  <td className="px-4 py-2.5 text-center tabular-nums">
-                    {subject.obtainedMarks}
-                  </td>
-                  <td className="px-4 py-2.5 text-center tabular-nums">
-                    {subject.totalMarks}
-                  </td>
-                  <td className="px-4 py-2.5 text-center font-medium">{subject.grade}</td>
-                </tr>
-              ))}
-            </tbody>
-            <tfoot>
-              <tr className="bg-emerald-50/50 font-semibold dark:bg-emerald-950/20">
-                <td className="px-4 py-3">Total</td>
-                <td className="px-4 py-3 text-center tabular-nums">{result.obtainedMarks}</td>
-                <td className="px-4 py-3 text-center tabular-nums">{result.totalMarks}</td>
-                <td className="px-4 py-3 text-center">{result.grade}</td>
-              </tr>
-            </tfoot>
-          </table>
+        <div className="mt-6">
+          <SimpleTable
+            data={result.subjects}
+            getRowKey={(subject) => subject.subjectName}
+            className="rounded-lg"
+            footer={
+              <TableRow className="bg-status-success-bg font-semibold hover:bg-status-success-bg">
+                <TableCell className="px-4 py-3">Total</TableCell>
+                <TableCell className="px-4 py-3 text-center tabular-nums">
+                  {result.obtainedMarks}
+                </TableCell>
+                <TableCell className="px-4 py-3 text-center tabular-nums">
+                  {result.totalMarks}
+                </TableCell>
+                <TableCell className="px-4 py-3 text-center">{result.grade}</TableCell>
+              </TableRow>
+            }
+            columns={subjectColumns}
+          />
         </div>
 
         <div className="mt-6 flex items-center justify-between rounded-lg bg-muted/40 p-4">
@@ -90,7 +105,7 @@ export const ResultCard = forwardRef<HTMLDivElement, ResultCardProps>(
           </div>
           <div className="text-right">
             <p className="text-xs text-muted-foreground">Overall Grade</p>
-            <p className="text-2xl font-bold text-emerald-600">{result.grade}</p>
+            <p className="text-2xl font-bold text-status-success-fg">{result.grade}</p>
           </div>
         </div>
 

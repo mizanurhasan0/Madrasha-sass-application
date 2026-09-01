@@ -3,8 +3,16 @@ import { Manrope, Noto_Sans_Bengali } from "next/font/google";
 import localFont from "next/font/local";
 import { cookies } from "next/headers";
 import { Providers } from "@/components/providers";
+import { TenantThemeProvider } from "@/components/tenant-theme-provider";
 import { siteConfig } from "@/config/site";
+import { madrasas } from "@/data/madrasas";
+import { MADRASA_ID } from "@/data/users";
 import { getLocaleFromCookie } from "@/lib/i18n/locale";
+import {
+  madrasaThemeToCssVars,
+  mergeMadrasaTheme,
+  parseMadrasaThemeCookie,
+} from "@/lib/theme/tenant-theme";
 import "./globals.css";
 
 const manrope = Manrope({
@@ -36,16 +44,24 @@ export const metadata: Metadata = {
 
 export default async function RootLayout({ children }: LayoutProps<"/">) {
   const cookieStore = await cookies();
-  const locale = getLocaleFromCookie(cookieStore.toString());
+  const cookieHeader = cookieStore.toString();
+  const locale = getLocaleFromCookie(cookieHeader);
+  const cookieTheme = parseMadrasaThemeCookie(cookieHeader);
+  const madrasa = madrasas.find((m) => m.id === MADRASA_ID);
+  const tenantTheme = mergeMadrasaTheme({ ...madrasa?.theme, ...cookieTheme });
 
   return (
     <html
       lang={locale}
       suppressHydrationWarning
+      style={madrasaThemeToCssVars(tenantTheme)}
       className={`${manrope.variable} ${gallery.variable} ${notoBengali.variable} h-full`}
     >
       <body className="min-h-full flex flex-col" suppressHydrationWarning>
-        <Providers>{children}</Providers>
+        <Providers>
+          <TenantThemeProvider theme={tenantTheme} />
+          {children}
+        </Providers>
       </body>
     </html>
   );

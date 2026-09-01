@@ -186,7 +186,7 @@ export function GalleryPageContent() {
                   type="button"
                   onClick={() => setSelectedAlbum(album)}
                   className={`flex w-full items-center gap-3 rounded-xl border p-3 text-left transition-colors hover:bg-muted/50 ${
-                    selectedAlbum?.id === album.id ? "border-emerald-500 bg-emerald-50/50 dark:bg-emerald-950/20" : ""
+                    selectedAlbum?.id === album.id ? "border-primary bg-primary/5" : ""
                   }`}
                 >
                   <div className="relative size-12 shrink-0 overflow-hidden rounded-lg">

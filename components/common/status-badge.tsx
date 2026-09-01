@@ -1,7 +1,7 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { getStatusColor } from "@/lib/format";
+import { getStatusVariant, statusBadgeVariants } from "@/lib/theme/status";
 import { useT } from "@/lib/i18n/locale-provider";
 
 type StatusBadgeProps = {
@@ -14,16 +14,9 @@ export function StatusBadge({ status, className }: StatusBadgeProps) {
   const key = `status.${status}`;
   const translated = t(key);
   const label = translated === key ? status.replace(/_/g, " ") : translated;
+  const variant = getStatusVariant(status);
 
   return (
-    <span
-      className={cn(
-        "inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium capitalize",
-        getStatusColor(status),
-        className
-      )}
-    >
-      {label}
-    </span>
+    <span className={cn(statusBadgeVariants({ variant }), className)}>{label}</span>
   );
 }

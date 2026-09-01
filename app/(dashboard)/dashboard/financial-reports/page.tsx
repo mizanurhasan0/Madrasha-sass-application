@@ -1,12 +1,11 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { ClipboardList, TrendingUp, Wallet } from "lucide-react";
 import { PageHeader } from "@/components/common/page-header";
-import { StatCard } from "@/components/common/stat-card";
 import { ChartCard } from "@/components/common/chart-card";
 import { CardSkeleton } from "@/components/common/loading-state";
 import { RoleGuard } from "@/components/dashboard/role-guard";
+import { FeeStatsGrid } from "@/components/fees/fee-stats-grid";
 import {
   AreaTrendChart,
   BarSeriesChart,
@@ -85,32 +84,7 @@ export default function FinancialReportsPage() {
           description="Collection trends and payment analytics."
         />
 
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          <StatCard
-            title="Total Collection"
-            value={stats.totalCollection}
-            isCurrency
-            icon={<Wallet className="size-5" />}
-          />
-          <StatCard
-            title="Total Due"
-            value={stats.totalDue}
-            isCurrency
-            icon={<ClipboardList className="size-5" />}
-          />
-          <StatCard
-            title="Today's Collection"
-            value={stats.todayCollection}
-            isCurrency
-            icon={<TrendingUp className="size-5" />}
-          />
-          <StatCard
-            title="Monthly Collection"
-            value={stats.monthlyCollection}
-            isCurrency
-            icon={<Wallet className="size-5" />}
-          />
-        </div>
+        <FeeStatsGrid stats={stats} />
 
         <div className="grid gap-4 lg:grid-cols-2">
           <ChartCard title="Monthly Collection Trend" description="Paid amounts by month">

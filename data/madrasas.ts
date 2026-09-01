@@ -7,7 +7,7 @@ export const subscriptionPlans: SubscriptionPlan[] = [
 ];
 
 export const madrasas: Madrasa[] = [
-  { id: "madrasa_alnoor", name: "Al-Noor Islamic Academy", slug: "al-noor", adminName: "Mohammad Karim", adminEmail: "madrasa@example.com", phone: "01722222222", address: "Mirpur DOHS, Dhaka", studentCount: 450, teacherCount: 28, planId: "plan_2", status: "active", joinedAt: "2023-06-15" },
+  { id: "madrasa_alnoor", name: "Al-Noor Islamic Academy", slug: "al-noor", adminName: "Mohammad Karim", adminEmail: "madrasa@example.com", phone: "01722222222", address: "Mirpur DOHS, Dhaka", studentCount: 450, teacherCount: 28, planId: "plan_2", status: "active", joinedAt: "2023-06-15", theme: { primary: "oklch(0.38 0.1 148)", accent: "oklch(0.87 0.16 118)", deep: "oklch(0.26 0.05 165)" } },
   { id: "madrasa_2", name: "Darul Huda Madrasa", slug: "darul-huda", adminName: "Maulana Yusuf", adminEmail: "admin@darulhuda.edu.bd", phone: "01711223344", address: "Uttara, Dhaka", studentCount: 320, teacherCount: 22, planId: "plan_2", status: "active", joinedAt: "2023-08-20" },
   { id: "madrasa_3", name: "Al-Hidayah Institute", slug: "al-hidayah", adminName: "Abdul Mannan", adminEmail: "admin@alhidayah.edu.bd", phone: "01722334455", address: "Gazipur", studentCount: 180, teacherCount: 15, planId: "plan_1", status: "active", joinedAt: "2024-01-10" },
   { id: "madrasa_4", name: "Jamia Islamia", slug: "jamia-islamia", adminName: "Sheikh Ahmad", adminEmail: "admin@jamia.edu.bd", phone: "01733445566", address: "Narayanganj", studentCount: 520, teacherCount: 35, planId: "plan_3", status: "active", joinedAt: "2023-03-05" },

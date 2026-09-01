@@ -133,7 +133,7 @@ export function ResultSearch({
               </ul>
             )}
             {selectedStudent && (
-              <div className="flex items-center justify-between rounded-lg bg-emerald-50 px-4 py-3 dark:bg-emerald-950/30">
+              <div className="flex items-center justify-between rounded-lg bg-status-success-bg px-4 py-3">
                 <div>
                   <p className="font-medium">{selectedStudent.name}</p>
                   <p className="text-xs text-muted-foreground">
