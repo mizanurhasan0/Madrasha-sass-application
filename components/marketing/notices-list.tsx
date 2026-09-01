@@ -21,8 +21,16 @@ export function NoticesList({ notices }: NoticesListProps) {
   const [category, setCategory] = useState<(typeof categories)[number]>("all");
 
   const filtered = useMemo(() => {
-    if (category === "all") return notices.filter((n) => n.published);
-    return notices.filter((n) => n.published && n.category === category);
+    const published = notices.filter((n) => n.published);
+    const urgentCategories = new Set<Notice["category"]>(["admission", "holiday", "exam"]);
+    const sorted = [...published].sort((a, b) => {
+      const aUrgent = urgentCategories.has(a.category) ? 1 : 0;
+      const bUrgent = urgentCategories.has(b.category) ? 1 : 0;
+      if (aUrgent !== bUrgent) return bUrgent - aUrgent;
+      return b.publishDate.localeCompare(a.publishDate);
+    });
+    if (category === "all") return sorted;
+    return sorted.filter((n) => n.category === category);
   }, [notices, category]);
 
   const categoryLabel: Record<string, string> = {
@@ -58,9 +66,14 @@ export function NoticesList({ notices }: NoticesListProps) {
               <Card className="border-border/60 shadow-soft">
                 <CardHeader className="flex-row items-start justify-between gap-4 space-y-0">
                   <div>
-                    <Badge variant="secondary" className="mb-2 capitalize">
-                      {notice.category}
-                    </Badge>
+                    <div className="mb-2 flex flex-wrap items-center gap-2">
+                      <Badge variant="secondary" className="capitalize">
+                        {notice.category}
+                      </Badge>
+                      {["admission", "holiday", "exam"].includes(notice.category) && (
+                        <Badge variant="destructive">Important</Badge>
+                      )}
+                    </div>
                     <CardTitle className="text-lg">{notice.title}</CardTitle>
                     <CardDescription>{formatDate(notice.publishDate)}</CardDescription>
                   </div>

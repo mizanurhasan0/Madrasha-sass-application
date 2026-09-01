@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { siteConfig } from "@/config/site";
+import type { WebsiteAbout } from "@/types/website";
 import { MarketingPageHeader } from "@/components/marketing/marketing-page-header";
 import { Section } from "@/components/marketing/section";
 import { CtaBand } from "@/components/marketing/cta-band";
@@ -9,7 +9,12 @@ import { Reveal } from "@/components/marketing/reveal";
 import { Button } from "@/components/ui/button";
 import { useT } from "@/lib/i18n/locale-provider";
 
-export function AboutContent() {
+type AboutContentProps = {
+  about: WebsiteAbout;
+  madrasaName: string;
+};
+
+export function AboutContent({ about, madrasaName }: AboutContentProps) {
   const t = useT();
 
   const whyItems = [
@@ -25,24 +30,26 @@ export function AboutContent() {
     <>
       <MarketingPageHeader
         eyebrow={t("about.eyebrow")}
-        title={t("about.whyTitle")}
-        description={t("about.whyDescExtended")}
+        title={about.pageTitle}
+        description={about.intro}
       />
       <Section>
         <div className="grid gap-12 lg:grid-cols-2">
           <Reveal>
-            <p className="text-lg leading-relaxed text-muted-foreground">
-              {t("about.intro", { name: siteConfig.madrasaName })}
-            </p>
+            <p className="text-lg leading-relaxed text-muted-foreground">{about.intro}</p>
             <div className="mt-8 grid gap-6 sm:grid-cols-2">
               <div className="rounded-2xl border border-border/60 p-6 shadow-soft">
                 <h3 className="font-heading text-xl">{t("about.mission")}</h3>
-                <p className="mt-2 text-muted-foreground">{t("about.missionDesc")}</p>
+                <p className="mt-2 text-muted-foreground">{about.mission}</p>
               </div>
               <div className="rounded-2xl border border-border/60 p-6 shadow-soft">
                 <h3 className="font-heading text-xl">{t("about.vision")}</h3>
-                <p className="mt-2 text-muted-foreground">{t("about.visionDesc")}</p>
+                <p className="mt-2 text-muted-foreground">{about.vision}</p>
               </div>
+            </div>
+            <div className="mt-6 rounded-2xl border border-border/60 p-6 shadow-soft">
+              <h3 className="font-heading text-xl">Our Values</h3>
+              <p className="mt-2 text-muted-foreground">{about.values}</p>
             </div>
           </Reveal>
           <Reveal delay={150}>
@@ -66,7 +73,7 @@ export function AboutContent() {
           </Reveal>
         </div>
       </Section>
-      <CtaBand />
+      <CtaBand title={`Visit ${madrasaName}`} description={about.intro.slice(0, 120)} />
     </>
   );
 }

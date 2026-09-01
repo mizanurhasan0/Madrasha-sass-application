@@ -1,27 +1,38 @@
-import { BenefitsSection } from "@/components/marketing/benefits-section";
-import { CtaBand } from "@/components/marketing/cta-band";
-import { FaqSection } from "@/components/marketing/faq-section";
-import { FeatureGrid } from "@/components/marketing/feature-grid";
-import { Hero } from "@/components/marketing/hero";
-import { HomeMarquee } from "@/components/marketing/home-marquee";
-import { HowItWorks } from "@/components/marketing/how-it-works";
-import { MadrasaFeatures } from "@/components/marketing/madrasa-features";
-import { StatsBand } from "@/components/marketing/stats-band";
-import { Testimonials } from "@/components/marketing/testimonials";
+import type { Metadata } from "next";
+import { readWebsiteConfig } from "@/lib/website/config";
+import { notices, events } from "@/data/notices";
+import { teachers } from "@/data/teachers";
+import { MadrasaHomeContent } from "@/components/marketing/madrasa-home-content";
+
+export async function generateMetadata(): Promise<Metadata> {
+  const config = readWebsiteConfig();
+  return {
+    title: config.general.madrasaName,
+    description: config.general.description,
+    openGraph: {
+      title: config.general.madrasaName,
+      description: config.general.description,
+      url: config.general.websiteUrl,
+    },
+  };
+}
 
 export default function HomePage() {
+  const config = readWebsiteConfig();
+  const publishedNotices = notices
+    .filter((n) => n.published)
+    .slice(0, config.noticesMeta.maxVisible || 3);
+  const upcomingEvents = events
+    .filter((e) => e.status === "upcoming")
+    .slice(0, config.eventsMeta.maxVisible || 3);
+  const featuredTeachers = teachers.slice(0, config.teachersMeta.featuredCount || 3);
+
   return (
-    <>
-      <Hero />
-      <StatsBand />
-      <FeatureGrid />
-      <HowItWorks />
-      <MadrasaFeatures />
-      <BenefitsSection />
-      <HomeMarquee />
-      <Testimonials />
-      <FaqSection />
-      <CtaBand />
-    </>
+    <MadrasaHomeContent
+      config={config}
+      notices={publishedNotices}
+      events={upcomingEvents}
+      teachers={featuredTeachers}
+    />
   );
 }

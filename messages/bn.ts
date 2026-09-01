@@ -74,6 +74,7 @@ const bn: Messages = {
     users: "ব্যবহারকারী",
     payments: "পেমেন্ট",
     students: "শিক্ষার্থী",
+    admissions: "ভর্তি",
     teachersStaff: "শিক্ষক ও স্টাফ",
     academic: "একাডেমিক",
     attendance: "উপস্থিতি",

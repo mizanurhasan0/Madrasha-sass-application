@@ -5,18 +5,10 @@ import { Textarea } from "@/components/ui/textarea";
 import { CmsField } from "@/components/website/cms-field";
 import { CmsPageSection } from "@/components/website/cms-page-section";
 
-export type Program = {
-  title: string;
-  duration: string;
-  description: string;
-};
+import type { WebsiteProgram, WebsiteProgramsMeta } from "@/types/website";
 
-export type ProgramsMetaState = {
-  pageTitle: string;
-  pageSubtitle: string;
-  ctaTitle: string;
-  ctaDescription: string;
-};
+export type Program = WebsiteProgram;
+export type ProgramsMetaState = WebsiteProgramsMeta;
 
 export const defaultPrograms: Program[] = [
   {

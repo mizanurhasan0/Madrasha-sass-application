@@ -1,12 +1,16 @@
 import type { Metadata } from "next";
-import { siteConfig } from "@/config/site";
+import { readWebsiteConfig } from "@/lib/website/config";
 import { AboutContent } from "./about-content";
 
-export const metadata: Metadata = {
-  title: "About",
-  description: `Learn about ${siteConfig.madrasaName} and our mission.`,
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const config = readWebsiteConfig();
+  return {
+    title: "About",
+    description: config.about.intro.slice(0, 160),
+  };
+}
 
 export default function AboutPage() {
-  return <AboutContent />;
+  const config = readWebsiteConfig();
+  return <AboutContent about={config.about} madrasaName={config.general.madrasaName} />;
 }

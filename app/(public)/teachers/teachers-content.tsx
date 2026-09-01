@@ -1,24 +1,23 @@
 "use client";
 
 import type { Teacher } from "@/types/teacher";
+import type { WebsiteTeachersMeta } from "@/types/website";
 import { MarketingPageHeader } from "@/components/marketing/marketing-page-header";
 import { TeachersDirectory } from "@/components/marketing/teachers-directory";
 import { Section } from "@/components/marketing/section";
-import { useT } from "@/lib/i18n/locale-provider";
 
 type TeachersContentProps = {
   teachers: Teacher[];
+  meta: WebsiteTeachersMeta;
 };
 
-export function TeachersContent({ teachers }: TeachersContentProps) {
-  const t = useT();
-
+export function TeachersContent({ teachers, meta }: TeachersContentProps) {
   return (
     <>
       <MarketingPageHeader
-        eyebrow={t("teachersPage.eyebrow")}
-        title={t("teachersPage.title")}
-        description={t("teachersPage.subtitle", { count: teachers.length })}
+        eyebrow="Teachers"
+        title={meta.pageTitle}
+        description={meta.pageSubtitle}
       />
       <Section>
         <TeachersDirectory teachers={teachers} />

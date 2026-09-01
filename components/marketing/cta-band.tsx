@@ -11,9 +11,20 @@ import { Section } from "./section";
 type CtaBandProps = {
   title?: string;
   description?: string;
+  primaryHref?: string;
+  primaryLabel?: string;
+  secondaryHref?: string;
+  secondaryLabel?: string;
 };
 
-export function CtaBand({ title, description }: CtaBandProps) {
+export function CtaBand({
+  title,
+  description,
+  primaryHref = "/login",
+  primaryLabel,
+  secondaryHref = "/contact",
+  secondaryLabel,
+}: CtaBandProps) {
   const t = useT();
 
   return (
@@ -26,16 +37,16 @@ export function CtaBand({ title, description }: CtaBandProps) {
           {description ?? t("cta.defaultDescription", { name: siteConfig.madrasaName })}
         </p>
         <div className="mt-8 flex flex-wrap justify-center gap-4">
-          <Button size="lg" variant="secondary" render={<Link href="/login" />}>
-            {t("cta.getStartedFree")} <ArrowRight className="size-4" />
+          <Button size="lg" variant="secondary" render={<Link href={primaryHref} />}>
+            {primaryLabel ?? t("cta.getStartedFree")} <ArrowRight className="size-4" />
           </Button>
           <Button
             size="lg"
             variant="outline"
             className="border-white/30 bg-transparent text-white hover:bg-white/10"
-            render={<Link href="/contact" />}
+            render={<Link href={secondaryHref} />}
           >
-            {t("cta.contactUs")}
+            {secondaryLabel ?? t("cta.contactUs")}
           </Button>
         </div>
       </Reveal>

@@ -1,22 +1,24 @@
 "use client";
 
+import type { WebsiteContact } from "@/types/website";
 import { MarketingPageHeader } from "@/components/marketing/marketing-page-header";
 import { ContactForm } from "@/components/marketing/contact-form";
 import { Section } from "@/components/marketing/section";
-import { useT } from "@/lib/i18n/locale-provider";
 
-export function ContactContent() {
-  const t = useT();
+type ContactContentProps = {
+  contact: WebsiteContact;
+};
 
+export function ContactContent({ contact }: ContactContentProps) {
   return (
     <>
       <MarketingPageHeader
-        eyebrow={t("contact.eyebrow")}
-        title={t("contact.title")}
-        description={t("contact.pageDesc")}
+        eyebrow="Contact"
+        title={contact.pageTitle}
+        description={contact.pageSubtitle}
       />
       <Section>
-        <ContactForm />
+        <ContactForm contact={contact} />
       </Section>
     </>
   );

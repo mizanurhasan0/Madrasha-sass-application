@@ -1,9 +1,11 @@
 "use client";
 
+import Link from "next/link";
 import { useMemo, useState } from "react";
 import Image from "next/image";
 import { Calendar, Clock, MapPin } from "lucide-react";
 import type { Event } from "@/types/notice";
+import { eventSlug } from "@/lib/events";
 import { EmptyState } from "@/components/common/empty-state";
 import { StatusBadge } from "@/components/common/status-badge";
 import { Button } from "@/components/ui/button";
@@ -52,10 +54,17 @@ export function EventsList({ events }: EventsListProps) {
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         {filtered.map((event, i) => (
           <Reveal key={event.id} delay={wowStaggerDelay(i)}>
-            <Card className="h-full overflow-hidden border-border/60 pt-0 shadow-soft">
+            <Link href={`/events/${eventSlug(event)}`}>
+              <Card className="h-full overflow-hidden border-border/60 pt-0 shadow-soft transition-shadow hover:shadow-md">
               {event.image && (
                 <div className="relative aspect-video">
-                  <Image src={event.image} alt={event.title} fill className="object-cover" />
+                  <Image
+                    src={event.image}
+                    alt={event.title}
+                    fill
+                    sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                    className="object-cover"
+                  />
                 </div>
               )}
               <CardHeader>
@@ -80,7 +89,8 @@ export function EventsList({ events }: EventsListProps) {
                   </p>
                 )}
               </CardContent>
-            </Card>
+              </Card>
+            </Link>
           </Reveal>
         ))}
       </div>

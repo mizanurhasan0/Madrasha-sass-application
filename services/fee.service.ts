@@ -1,6 +1,7 @@
 import type { PaginatedQuery } from "@/types/common";
 import type { Fee, Payment } from "@/types/fee";
 import { fees as initialFees, payments as initialPayments, receipts as initialReceipts } from "@/data/payments";
+import { studentService } from "@/services/student.service";
 import { generateId, paginate, simulateLatency, success } from "./base.service";
 
 const feesStore = [...initialFees];
@@ -79,5 +80,44 @@ export const feeService = {
 
   getAllPayments() {
     return paymentsStore;
+  },
+
+  lookupFeePublic(query: { studentId?: string; invoiceNo?: string }) {
+    const q = (query.invoiceNo ?? query.studentId ?? "").trim().toLowerCase();
+    if (!q) {
+      return { success: false as const, data: null, message: "Enter student ID or invoice number" };
+    }
+
+    let payment = paymentsStore.find((p) => p.invoiceNo.toLowerCase() === q);
+    if (!payment) {
+      const student = studentService
+        .getAll()
+        .find(
+          (s) =>
+            s.studentId.toLowerCase() === q ||
+            s.id.toLowerCase() === q
+        );
+      if (student) {
+        payment = paymentsStore.find((p) => p.studentId === student.id);
+      }
+    }
+
+    if (!payment) {
+      return { success: false as const, data: null, message: "No fee record found" };
+    }
+
+    const student = studentService.getAll().find((s) => s.id === payment!.studentId);
+
+    return success({
+      invoiceNo: payment.invoiceNo,
+      studentId: student?.studentId ?? payment.studentId,
+      studentName: student?.name ?? "Unknown",
+      feeType: payment.feeType,
+      amount: payment.amount,
+      paid: payment.paid,
+      due: payment.due,
+      status: payment.status,
+      date: payment.date,
+    });
   },
 };

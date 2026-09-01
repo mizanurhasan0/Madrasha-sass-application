@@ -45,9 +45,19 @@ export const examService = {
 
   async getStudentResult(studentId: string, examId: string) {
     await simulateLatency();
+    return this.buildStudentResult(studentId, examId);
+  },
+
+  getStudentResultPublic(studentId: string, examId: string) {
+    return this.buildStudentResult(studentId, examId);
+  },
+
+  buildStudentResult(studentId: string, examId: string) {
     const exam = examsStore.find((e) => e.id === examId);
     const marks = marksStore.filter((m) => m.studentId === studentId && m.examId === examId);
-    if (!exam || marks.length === 0) return { success: false as const, data: null, message: "Result not found" };
+    if (!exam || marks.length === 0) {
+      return { success: false as const, data: null, message: "Result not found" };
+    }
 
     const subjectMarks = marks.map((m) => {
       const subject = subjects.find((s) => s.id === m.subjectId);
@@ -74,7 +84,7 @@ export const examService = {
       obtainedMarks,
       average,
       grade,
-      status: average >= 33 ? "pass" as const : "fail" as const,
+      status: average >= 33 ? ("pass" as const) : ("fail" as const),
     });
   },
 

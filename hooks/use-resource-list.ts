@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import type { PaginatedResult } from "@/types/common";
 
 type FetchResult<T> = {
@@ -36,6 +36,9 @@ export function useResourceList<T, F extends Record<string, string> = Record<str
   const [search, setSearchState] = useState("");
   const [page, setPageState] = useState(1);
   const [filters, setFiltersState] = useState<F>((initialFilters ?? {}) as F);
+  const [hasLoadedOnce, setHasLoadedOnce] = useState(false);
+  const fetchFnRef = useRef(fetchFn);
+  fetchFnRef.current = fetchFn;
 
   const refetch = useCallback(async () => {
     if (!enabled) return;
@@ -44,7 +47,7 @@ export function useResourceList<T, F extends Record<string, string> = Record<str
     setError(null);
 
     try {
-      const result = await fetchFn({
+      const result = await fetchFnRef.current({
         page,
         limit,
         search: search || undefined,
@@ -62,8 +65,9 @@ export function useResourceList<T, F extends Record<string, string> = Record<str
       setError(errorMessage);
     } finally {
       setLoading(false);
+      setHasLoadedOnce(true);
     }
-  }, [enabled, fetchFn, page, limit, search, filters, errorMessage, refreshKey]);
+  }, [enabled, page, limit, search, filters, errorMessage, refreshKey]);
 
   useEffect(() => {
     if (!enabled) {
@@ -110,7 +114,7 @@ export function useResourceList<T, F extends Record<string, string> = Record<str
     setFilters,
     refetch,
     isEmpty: !loading && data.length === 0,
-    isInitialLoad: loading && data.length === 0,
+    isInitialLoad: loading && !hasLoadedOnce,
     refreshKey,
   };
 }

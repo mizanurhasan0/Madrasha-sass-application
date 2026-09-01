@@ -38,6 +38,7 @@ export const navigationItems: NavItem[] = [
   { titleKey: "nav.users", href: "/dashboard/users", icon: Users, roles: ["super_admin"] },
   { titleKey: "nav.payments", href: "/dashboard/payments", icon: Wallet, roles: ["super_admin", "madrasa_admin", "accountant"] },
   { titleKey: "nav.students", href: "/dashboard/students", icon: GraduationCap, roles: ["madrasa_admin"] },
+  { titleKey: "nav.admissions", href: "/dashboard/admissions", icon: ClipboardList, roles: ["madrasa_admin"] },
   { titleKey: "nav.teachersStaff", href: "/dashboard/teachers", icon: UserSquare2, roles: ["madrasa_admin"] },
   { titleKey: "nav.academic", href: "/dashboard/academics/classes", icon: BookOpen, roles: ["madrasa_admin"] },
   { titleKey: "nav.attendance", href: "/dashboard/attendance", icon: ClipboardCheck, roles: ["madrasa_admin", "teacher", "guardian"] },

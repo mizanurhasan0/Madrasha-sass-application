@@ -5,16 +5,17 @@ import { usePathname } from "next/navigation";
 import { Menu, X } from "lucide-react";
 import { useState } from "react";
 import { publicNavLinks } from "@/config/navigation";
-import { siteConfig } from "@/config/site";
 import { LanguageSwitcher } from "@/components/common/language-switcher";
 import { ThemeToggle } from "@/components/layout/theme-toggle";
 import { Button } from "@/components/ui/button";
+import { useWebsiteConfig } from "@/components/marketing/public-site-provider";
 import { useT } from "@/lib/i18n/locale-provider";
 import { cn } from "@/lib/utils";
 import { marketingContainer } from "./layout";
 
 export function SiteHeader() {
   const t = useT();
+  const config = useWebsiteConfig();
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
 
@@ -30,7 +31,7 @@ export function SiteHeader() {
           href="/"
           className="flex shrink-0 items-center gap-2 font-heading text-xl font-semibold text-deep"
         >
-          {siteConfig.shortName}
+          {config.general.madrasaName}
         </Link>
 
         <nav className="hidden items-center gap-1 lg:flex">
@@ -53,6 +54,9 @@ export function SiteHeader() {
         <div className="hidden items-center gap-3 lg:flex">
           <LanguageSwitcher />
           <ThemeToggle />
+          <Button size="sm" variant="outline" render={<Link href="/admission" />}>
+            Apply
+          </Button>
           <Button size="sm" render={<Link href="/login" />}>
             {t("nav.login")}
           </Button>
@@ -83,6 +87,9 @@ export function SiteHeader() {
           <div className="mt-4 flex flex-wrap items-center gap-3">
             <LanguageSwitcher />
             <ThemeToggle />
+            <Button size="sm" variant="outline" render={<Link href="/admission" />}>
+              Apply
+            </Button>
             <Button size="sm" render={<Link href="/login" />}>
               {t("nav.login")}
             </Button>

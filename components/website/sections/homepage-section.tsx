@@ -2,18 +2,11 @@
 
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import type { WebsiteHomepage } from "@/types/website";
 import { CmsField } from "@/components/website/cms-field";
 import { CmsPageSection, CmsVisibilitySwitch } from "@/components/website/cms-page-section";
 
-export type HomepageState = {
-  heroTitle: string;
-  heroSubtitle: string;
-  badgeText: string;
-  primaryCta: string;
-  secondaryCta: string;
-  showStats: boolean;
-  showTestimonials: boolean;
-};
+export type HomepageState = WebsiteHomepage;
 
 type HomepageSectionProps = {
   homepage: HomepageState;
@@ -73,6 +66,18 @@ export function HomepageSection({ homepage, onChange, onSave }: HomepageSectionP
         checked={homepage.showTestimonials}
         onCheckedChange={(checked) => onChange({ ...homepage, showTestimonials: checked })}
       />
+      <CmsVisibilitySwitch
+        label="Admission Open Banner"
+        description="Show sticky admission banner on public site"
+        checked={homepage.admissionOpen}
+        onCheckedChange={(checked) => onChange({ ...homepage, admissionOpen: checked })}
+      />
+      <CmsField label="Admission Banner Text">
+        <Input
+          value={homepage.admissionBannerText}
+          onChange={(e) => onChange({ ...homepage, admissionBannerText: e.target.value })}
+        />
+      </CmsField>
     </CmsPageSection>
   );
 }

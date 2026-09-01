@@ -72,6 +72,7 @@ const en = {
     users: "Users",
     payments: "Payments",
     students: "Students",
+    admissions: "Admissions",
     teachersStaff: "Teachers & Staff",
     academic: "Academic",
     attendance: "Attendance",

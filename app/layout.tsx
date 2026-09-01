@@ -54,6 +54,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
     <html
       lang={locale}
       suppressHydrationWarning
+      data-scroll-behavior="smooth"
       style={madrasaThemeToCssVars(tenantTheme)}
       className={`${manrope.variable} ${gallery.variable} ${notoBengali.variable} h-full`}
     >
