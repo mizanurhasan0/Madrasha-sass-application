@@ -3,7 +3,6 @@
 import { Bell, BookOpen, GraduationCap, LayoutDashboard, Users } from "lucide-react";
 import { useT } from "@/lib/i18n/locale-provider";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Section } from "./section";
 
 export function DashboardPreview() {
   const t = useT();
@@ -38,26 +37,5 @@ export function DashboardPreview() {
         <p>{t("dashboardPreview.feed3")}</p>
       </div>
     </div>
-  );
-}
-
-export function DashboardPreviewSection() {
-  const t = useT();
-
-  return (
-    <Section containerClassName="grid items-center gap-12 lg:grid-cols-2">
-      <div>
-        <span className="block text-sm font-semibold uppercase tracking-widest text-primary">
-          {t("dashboardPreview.sectionEyebrow")}
-        </span>
-        <h2 className="mt-2 font-heading text-[clamp(1.75rem,3vw+0.5rem,2.75rem)] leading-tight text-deep">
-          {t("dashboardPreview.sectionTitle")}
-        </h2>
-        <p className="mt-4 text-muted-foreground leading-relaxed">
-          {t("dashboardPreview.sectionSubtitle")}
-        </p>
-      </div>
-      <DashboardPreview />
-    </Section>
   );
 }
