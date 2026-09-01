@@ -11,7 +11,11 @@ import { paginate, simulateLatency, success } from "./base.service";
 export const madrasaService = {
   async getMadrasas(query?: PaginatedQuery) {
     await simulateLatency();
-    return success(paginate(initialMadrasas, query));
+    return success(
+      paginate(initialMadrasas, query, {
+        searchKeys: ["name", "slug", "address", "adminName", "adminEmail"],
+      })
+    );
   },
 
   async getSubscriptions() {
@@ -41,7 +45,9 @@ export const madrasaService = {
 
   async getPayments(query?: PaginatedQuery) {
     await simulateLatency();
-    return success(paginate(payments, query));
+    return success(
+      paginate(payments, query, { searchKeys: ["invoiceNo", "studentId"] })
+    );
   },
 
   getAllMadrasas() {

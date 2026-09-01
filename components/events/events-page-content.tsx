@@ -1,10 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { Plus, Pencil, Trash2 } from "lucide-react";
-import { toast } from "sonner";
 import { PageHeader } from "@/components/common/page-header";
-import { DataTable, useTableState, type Column } from "@/components/common/data-table";
+import { DataTable, type Column } from "@/components/common/data-table";
 import { StatusBadge } from "@/components/common/status-badge";
 import { DateDisplay } from "@/components/common/format-display";
 import { FormModal } from "@/components/common/form-modal";
@@ -12,82 +10,45 @@ import { ConfirmDialog } from "@/components/common/confirm-dialog";
 import { TableSkeleton } from "@/components/common/loading-state";
 import { Button } from "@/components/ui/button";
 import { EventForm, type EventFormData } from "@/components/events/event-form";
+import { useResourceList } from "@/hooks/use-resource-list";
+import { useCrudModal } from "@/hooks/use-crud-modal";
 import { eventService } from "@/services/notice.service";
 import type { Event } from "@/types/notice";
 
 export function EventsPageContent() {
-  const [loading, setLoading] = useState(true);
-  const [events, setEvents] = useState<Event[]>([]);
-  const [totalPages, setTotalPages] = useState(1);
-  const [modalOpen, setModalOpen] = useState(false);
-  const [editing, setEditing] = useState<Event | null>(null);
-  const [deleteTarget, setDeleteTarget] = useState<Event | null>(null);
-  const [submitting, setSubmitting] = useState(false);
-  const { search, setSearch, page, setPage } = useTableState();
+  const {
+    data: events,
+    search,
+    setSearch,
+    page,
+    setPage,
+    totalPages,
+    isInitialLoad,
+    refetch,
+  } = useResourceList({
+    fetchFn: (params) => eventService.getEvents(params),
+  });
 
-  const loadEvents = async () => {
-    setLoading(true);
-    const res = await eventService.getEvents({
-      page,
-      limit: 10,
-      search: search || undefined,
-    });
-    if (res.success) {
-      setEvents(res.data.data);
-      setTotalPages(res.data.totalPages);
-    }
-    setLoading(false);
-  };
-
-  useEffect(() => {
-    loadEvents();
-  }, [page, search]);
-
-  const handleCreate = () => {
-    setEditing(null);
-    setModalOpen(true);
-  };
-
-  const handleEdit = (event: Event) => {
-    setEditing(event);
-    setModalOpen(true);
-  };
-
-  const handleSubmit = async (data: EventFormData) => {
-    setSubmitting(true);
-    if (editing) {
-      const res = await eventService.updateEvent(editing.id, data);
-      if (res.success) {
-        toast.success("Event updated");
-        setModalOpen(false);
-        loadEvents();
-      } else {
-        toast.error(res.message ?? "Failed to update event");
-      }
-    } else {
-      const res = await eventService.createEvent(data);
-      if (res.success) {
-        toast.success("Event created");
-        setModalOpen(false);
-        loadEvents();
-      } else {
-        toast.error("Failed to create event");
-      }
-    }
-    setSubmitting(false);
-  };
-
-  const handleDelete = async () => {
-    if (!deleteTarget) return;
-    const res = await eventService.deleteEvent(deleteTarget.id);
-    if (res.success) {
-      toast.success("Event deleted");
-      setDeleteTarget(null);
-      loadEvents();
-    } else {
-      toast.error("Failed to delete event");
-    }
-  };
+  const crud = useCrudModal<Event>({
+    onCreate: async (values) => {
+      const res = await eventService.createEvent(values as EventFormData);
+      return { success: res.success, message: res.message };
+    },
+    onUpdate: async (id, values) => {
+      const res = await eventService.updateEvent(id, values as EventFormData);
+      return { success: res.success, message: res.message };
+    },
+    onDelete: async (item) => {
+      const res = await eventService.deleteEvent(item.id);
+      return { success: res.success, message: res.message };
+    },
+    onSuccess: refetch,
+    messages: {
+      create: "Event created",
+      update: "Event updated",
+      delete: "Event deleted",
+    },
+  });
 
   const columns: Column<Event>[] = [
     {
@@ -121,10 +82,10 @@ export function EventsPageContent() {
       className: "text-right",
       cell: (row) => (
         <div className="flex justify-end gap-1">
-          <Button variant="ghost" size="icon" onClick={() => handleEdit(row)}>
+          <Button variant="ghost" size="icon" onClick={() => crud.openEdit(row)}>
             <Pencil className="size-4" />
           </Button>
-          <Button variant="ghost" size="icon" onClick={() => setDeleteTarget(row)}>
+          <Button variant="ghost" size="icon" onClick={() => crud.openDelete(row)}>
             <Trash2 className="size-4 text-destructive" />
           </Button>
         </div>
@@ -132,7 +93,7 @@ export function EventsPageContent() {
     },
   ];
 
-  if (loading && events.length === 0) {
+  if (isInitialLoad) {
     return (
       <div className="space-y-6">
         <PageHeader title="Events" description="Manage madrasa events and programs." />
@@ -147,7 +108,7 @@ export function EventsPageContent() {
         title="Events"
         description="Create and manage upcoming events, programs, and celebrations."
         actions={
-          <Button onClick={handleCreate}>
+          <Button onClick={crud.openCreate}>
             <Plus className="mr-1.5 size-4" />
             New Event
           </Button>
@@ -159,10 +120,7 @@ export function EventsPageContent() {
         columns={columns}
         searchPlaceholder="Search events..."
         searchValue={search}
-        onSearchChange={(v) => {
-          setSearch(v);
-          setPage(1);
-        }}
+        onSearchChange={setSearch}
         page={page}
         totalPages={totalPages}
         onPageChange={setPage}
@@ -179,10 +137,10 @@ export function EventsPageContent() {
             </p>
             <p className="text-xs text-muted-foreground">{row.location}</p>
             <div className="flex gap-2 pt-1">
-              <Button variant="outline" size="sm" onClick={() => handleEdit(row)}>
+              <Button variant="outline" size="sm" onClick={() => crud.openEdit(row)}>
                 Edit
               </Button>
-              <Button variant="outline" size="sm" onClick={() => setDeleteTarget(row)}>
+              <Button variant="outline" size="sm" onClick={() => crud.openDelete(row)}>
                 Delete
               </Button>
             </div>
@@ -191,27 +149,27 @@ export function EventsPageContent() {
       />
 
       <FormModal
-        open={modalOpen}
-        onOpenChange={setModalOpen}
-        title={editing ? "Edit Event" : "Create Event"}
+        open={crud.formOpen}
+        onOpenChange={crud.setFormOpen}
+        title={crud.editing ? "Edit Event" : "Create Event"}
         description="Add event details for the madrasa calendar and public website."
       >
         <EventForm
-          initial={editing ?? undefined}
-          onSubmit={handleSubmit}
-          onCancel={() => setModalOpen(false)}
-          submitting={submitting}
+          initial={crud.editing ?? undefined}
+          onSubmit={crud.handleSubmit}
+          onCancel={crud.closeForm}
+          submitting={crud.submitting}
         />
       </FormModal>
 
       <ConfirmDialog
-        open={!!deleteTarget}
-        onOpenChange={(open) => !open && setDeleteTarget(null)}
+        open={!!crud.deleteTarget}
+        onOpenChange={(open) => !open && crud.closeDelete()}
         title="Delete Event"
-        description={`Are you sure you want to delete "${deleteTarget?.title}"?`}
+        description={`Are you sure you want to delete "${crud.deleteTarget?.title}"?`}
         confirmLabel="Delete"
         variant="destructive"
-        onConfirm={handleDelete}
+        onConfirm={crud.handleDelete}
       />
     </div>
   );

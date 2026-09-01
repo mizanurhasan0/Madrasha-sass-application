@@ -12,7 +12,9 @@ export const noticeService = {
     let filtered = [...noticesStore];
     if (query?.category) filtered = filtered.filter((n) => n.category === query.category);
     if (query?.published !== undefined) filtered = filtered.filter((n) => n.published === query.published);
-    return success(paginate(filtered, query));
+    return success(
+      paginate(filtered, query, { searchKeys: ["title", "description"] })
+    );
   },
 
   async createNotice(input: Omit<Notice, "id" | "madrasaId">) {
@@ -44,7 +46,9 @@ export const noticeService = {
 export const eventService = {
   async getEvents(query?: PaginatedQuery) {
     await simulateLatency();
-    return success(paginate(eventsStore, query));
+    return success(
+      paginate(eventsStore, query, { searchKeys: ["title", "location"] })
+    );
   },
 
   async createEvent(input: Omit<Event, "id" | "madrasaId">) {

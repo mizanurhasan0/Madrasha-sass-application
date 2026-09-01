@@ -11,7 +11,7 @@ const marksStore = [...initialMarks];
 export const examService = {
   async getExams(query?: PaginatedQuery) {
     await simulateLatency();
-    return success(paginate(examsStore, query));
+    return success(paginate(examsStore, query, { searchKeys: ["name"] }));
   },
 
   async getExamById(id: string) {

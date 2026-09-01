@@ -1,10 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { Plus, Pencil, Trash2 } from "lucide-react";
-import { toast } from "sonner";
 import { PageHeader } from "@/components/common/page-header";
-import { DataTable, useTableState, type Column } from "@/components/common/data-table";
+import { DataTable, type Column } from "@/components/common/data-table";
 import { StatusBadge } from "@/components/common/status-badge";
 import { DateDisplay } from "@/components/common/format-display";
 import { FormModal } from "@/components/common/form-modal";
@@ -13,6 +11,8 @@ import { TableSkeleton } from "@/components/common/loading-state";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { NoticeForm, type NoticeFormData } from "@/components/notices/notice-form";
+import { useResourceList } from "@/hooks/use-resource-list";
+import { useCrudModal } from "@/hooks/use-crud-modal";
 import { noticeService } from "@/services/notice.service";
 import type { Notice, NoticeCategory } from "@/types/notice";
 
@@ -27,79 +27,48 @@ const categoryOptions = [
 ];
 
 export function NoticesPageContent() {
-  const [loading, setLoading] = useState(true);
-  const [notices, setNotices] = useState<Notice[]>([]);
-  const [totalPages, setTotalPages] = useState(1);
-  const [modalOpen, setModalOpen] = useState(false);
-  const [editing, setEditing] = useState<Notice | null>(null);
-  const [deleteTarget, setDeleteTarget] = useState<Notice | null>(null);
-  const [submitting, setSubmitting] = useState(false);
-  const { search, setSearch, page, setPage, filters, setFilter } = useTableState();
+  const {
+    data: notices,
+    search,
+    setSearch,
+    page,
+    setPage,
+    totalPages,
+    filters,
+    setFilter,
+    isInitialLoad,
+    refetch,
+  } = useResourceList<Notice, { category: string }>({
+    fetchFn: ({ page, limit, search, category }) =>
+      noticeService.getNotices({
+        page,
+        limit,
+        search: search || undefined,
+        category: category || undefined,
+      }),
+    initialFilters: { category: "" },
+  });
 
-  const loadNotices = async () => {
-    setLoading(true);
-    const res = await noticeService.getNotices({
-      page,
-      limit: 10,
-      search: search || undefined,
-      category: filters.category || undefined,
-    });
-    if (res.success) {
-      setNotices(res.data.data);
-      setTotalPages(res.data.totalPages);
-    }
-    setLoading(false);
-  };
-
-  useEffect(() => {
-    loadNotices();
-  }, [page, search, filters.category]);
-
-  const handleCreate = () => {
-    setEditing(null);
-    setModalOpen(true);
-  };
-
-  const handleEdit = (notice: Notice) => {
-    setEditing(notice);
-    setModalOpen(true);
-  };
-
-  const handleSubmit = async (data: NoticeFormData) => {
-    setSubmitting(true);
-    if (editing) {
-      const res = await noticeService.updateNotice(editing.id, data);
-      if (res.success) {
-        toast.success("Notice updated");
-        setModalOpen(false);
-        loadNotices();
-      } else {
-        toast.error(res.message ?? "Failed to update notice");
-      }
-    } else {
-      const res = await noticeService.createNotice(data);
-      if (res.success) {
-        toast.success("Notice created");
-        setModalOpen(false);
-        loadNotices();
-      } else {
-        toast.error("Failed to create notice");
-      }
-    }
-    setSubmitting(false);
-  };
-
-  const handleDelete = async () => {
-    if (!deleteTarget) return;
-    const res = await noticeService.deleteNotice(deleteTarget.id);
-    if (res.success) {
-      toast.success("Notice deleted");
-      setDeleteTarget(null);
-      loadNotices();
-    } else {
-      toast.error("Failed to delete notice");
-    }
-  };
+  const crud = useCrudModal<Notice>({
+    onCreate: async (values) => {
+      const res = await noticeService.createNotice(values as NoticeFormData);
+      return { success: res.success, message: res.message };
+    },
+    onUpdate: async (id, values) => {
+      const res = await noticeService.updateNotice(id, values as NoticeFormData);
+      return { success: res.success, message: res.message };
+    },
+    onDelete: async (item) => {
+      const res = await noticeService.deleteNotice(item.id);
+      return { success: res.success, message: res.message };
+    },
+    onSuccess: refetch,
+    messages: {
+      create: "Notice created",
+      update: "Notice updated",
+      delete: "Notice deleted",
+    },
+  });
 
   const columns: Column<Notice>[] = [
     {
@@ -144,10 +113,10 @@ export function NoticesPageContent() {
       className: "text-right",
       cell: (row) => (
         <div className="flex justify-end gap-1">
-          <Button variant="ghost" size="icon" onClick={() => handleEdit(row)}>
+          <Button variant="ghost" size="icon" onClick={() => crud.openEdit(row)}>
             <Pencil className="size-4" />
           </Button>
-          <Button variant="ghost" size="icon" onClick={() => setDeleteTarget(row)}>
+          <Button variant="ghost" size="icon" onClick={() => crud.openDelete(row)}>
             <Trash2 className="size-4 text-destructive" />
           </Button>
         </div>
@@ -155,7 +124,7 @@ export function NoticesPageContent() {
     },
   ];
 
-  if (loading && notices.length === 0) {
+  if (isInitialLoad) {
     return (
       <div className="space-y-6">
         <PageHeader title="Notices" description="Create and manage madrasa notices." />
@@ -170,7 +139,7 @@ export function NoticesPageContent() {
         title="Notices"
         description="Create, edit, and publish notices for teachers, guardians, and students."
         actions={
-          <Button onClick={handleCreate}>
+          <Button onClick={crud.openCreate}>
             <Plus className="mr-1.5 size-4" />
             New Notice
           </Button>
@@ -182,10 +151,7 @@ export function NoticesPageContent() {
         columns={columns}
         searchPlaceholder="Search notices..."
         searchValue={search}
-        onSearchChange={(v) => {
-          setSearch(v);
-          setPage(1);
-        }}
+        onSearchChange={setSearch}
         filters={[
           {
             key: "category",
@@ -213,10 +179,10 @@ export function NoticesPageContent() {
               <span className="text-xs text-muted-foreground capitalize">{row.audience}</span>
             </div>
             <div className="flex gap-2 pt-1">
-              <Button variant="outline" size="sm" onClick={() => handleEdit(row)}>
+              <Button variant="outline" size="sm" onClick={() => crud.openEdit(row)}>
                 Edit
               </Button>
-              <Button variant="outline" size="sm" onClick={() => setDeleteTarget(row)}>
+              <Button variant="outline" size="sm" onClick={() => crud.openDelete(row)}>
                 Delete
               </Button>
             </div>
@@ -225,27 +191,27 @@ export function NoticesPageContent() {
       />
 
       <FormModal
-        open={modalOpen}
-        onOpenChange={setModalOpen}
-        title={editing ? "Edit Notice" : "Create Notice"}
+        open={crud.formOpen}
+        onOpenChange={crud.setFormOpen}
+        title={crud.editing ? "Edit Notice" : "Create Notice"}
         description="Fill in the notice details and choose who should see it."
       >
         <NoticeForm
-          initial={editing ?? undefined}
-          onSubmit={handleSubmit}
-          onCancel={() => setModalOpen(false)}
-          submitting={submitting}
+          initial={crud.editing ?? undefined}
+          onSubmit={crud.handleSubmit}
+          onCancel={crud.closeForm}
+          submitting={crud.submitting}
         />
       </FormModal>
 
       <ConfirmDialog
-        open={!!deleteTarget}
-        onOpenChange={(open) => !open && setDeleteTarget(null)}
+        open={!!crud.deleteTarget}
+        onOpenChange={(open) => !open && crud.closeDelete()}
         title="Delete Notice"
-        description={`Are you sure you want to delete "${deleteTarget?.title}"? This action cannot be undone.`}
+        description={`Are you sure you want to delete "${crud.deleteTarget?.title}"? This action cannot be undone.`}
         confirmLabel="Delete"
         variant="destructive"
-        onConfirm={handleDelete}
+        onConfirm={crud.handleDelete}
       />
     </div>
   );

@@ -9,7 +9,11 @@ const staffStore = [...initialStaff];
 export const teacherService = {
   async getTeachers(query?: PaginatedQuery) {
     await simulateLatency();
-    return success(paginate(teachersStore, query));
+    return success(
+      paginate(teachersStore, query, {
+        searchKeys: ["name", "email", "phone", "designation"],
+      })
+    );
   },
 
   async getTeacherById(id: string) {
@@ -36,7 +40,11 @@ export const teacherService = {
 
   async getStaff(query?: PaginatedQuery) {
     await simulateLatency();
-    return success(paginate(staffStore, query));
+    return success(
+      paginate(staffStore, query, {
+        searchKeys: ["name", "email", "phone", "designation", "department"],
+      })
+    );
   },
 
   getAll() {

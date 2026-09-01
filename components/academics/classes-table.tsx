@@ -1,10 +1,11 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
-import { DataTable, useTableState, type Column } from "@/components/common/data-table";
+import { useEffect, useState } from "react";
+import { DataTable, type Column } from "@/components/common/data-table";
 import { StatusBadge } from "@/components/common/status-badge";
 import { TableSkeleton } from "@/components/common/loading-state";
 import { Badge } from "@/components/ui/badge";
+import { useResourceList } from "@/hooks/use-resource-list";
 import { academicService } from "@/services/academic.service";
 import type { Class } from "@/types/academic";
 
@@ -13,10 +14,11 @@ type ClassesTableProps = {
 };
 
 export function ClassesTable({ refreshKey = 0 }: ClassesTableProps) {
-  const { search, setSearch, page, setPage } = useTableState();
-  const [loading, setLoading] = useState(true);
-  const [classes, setClasses] = useState<Class[]>([]);
-  const [totalPages, setTotalPages] = useState(1);
+  const { data: classes, search, setSearch, page, setPage, totalPages, isInitialLoad } =
+    useResourceList({
+      fetchFn: (params) => academicService.getClasses(params),
+      refreshKey,
+    });
   const [sessionMap, setSessionMap] = useState<Map<string, string>>(new Map());
 
   useEffect(() => {
@@ -26,20 +28,6 @@ export function ClassesTable({ refreshKey = 0 }: ClassesTableProps) {
       }
     });
   }, []);
-
-  const loadClasses = useCallback(async () => {
-    setLoading(true);
-    const result = await academicService.getClasses({ page, limit: 10, search });
-    if (result.success) {
-      setClasses(result.data.data);
-      setTotalPages(result.data.totalPages);
-    }
-    setLoading(false);
-  }, [page, search, refreshKey]);
-
-  useEffect(() => {
-    loadClasses();
-  }, [loadClasses]);
 
   const columns: Column<Class>[] = [
     {
@@ -82,7 +70,7 @@ export function ClassesTable({ refreshKey = 0 }: ClassesTableProps) {
     },
   ];
 
-  if (loading && classes.length === 0) {
+  if (isInitialLoad) {
     return <TableSkeleton />;
   }
 
@@ -91,10 +79,7 @@ export function ClassesTable({ refreshKey = 0 }: ClassesTableProps) {
       data={classes}
       columns={columns}
       searchValue={search}
-      onSearchChange={(v) => {
-        setSearch(v);
-        setPage(1);
-      }}
+      onSearchChange={setSearch}
       searchPlaceholder="Search classes..."
       page={page}
       totalPages={totalPages}

@@ -1,35 +1,21 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
-import { DataTable, useTableState, type Column } from "@/components/common/data-table";
+import { DataTable, type Column } from "@/components/common/data-table";
 import { StatusBadge } from "@/components/common/status-badge";
 import { UserAvatar } from "@/components/common/user-avatar";
 import { DateDisplay } from "@/components/common/format-display";
 import { TableSkeleton } from "@/components/common/loading-state";
 import { Badge } from "@/components/ui/badge";
+import { useResourceList } from "@/hooks/use-resource-list";
 import { teacherService } from "@/services/teacher.service";
 import { formatPhone } from "@/lib/format";
 import type { Staff } from "@/types/teacher";
 
 export function StaffTable() {
-  const { search, setSearch, page, setPage } = useTableState();
-  const [loading, setLoading] = useState(true);
-  const [staff, setStaff] = useState<Staff[]>([]);
-  const [totalPages, setTotalPages] = useState(1);
-
-  const loadStaff = useCallback(async () => {
-    setLoading(true);
-    const result = await teacherService.getStaff({ page, limit: 10, search });
-    if (result.success) {
-      setStaff(result.data.data);
-      setTotalPages(result.data.totalPages);
-    }
-    setLoading(false);
-  }, [page, search]);
-
-  useEffect(() => {
-    loadStaff();
-  }, [loadStaff]);
+  const { data: staff, search, setSearch, page, setPage, totalPages, isInitialLoad } =
+    useResourceList({
+      fetchFn: (params) => teacherService.getStaff(params),
+    });
 
   const columns: Column<Staff>[] = [
     {
@@ -78,7 +64,7 @@ export function StaffTable() {
     },
   ];
 
-  if (loading && staff.length === 0) {
+  if (isInitialLoad) {
     return <TableSkeleton />;
   }
 
@@ -87,10 +73,7 @@ export function StaffTable() {
       data={staff}
       columns={columns}
       searchValue={search}
-      onSearchChange={(v) => {
-        setSearch(v);
-        setPage(1);
-      }}
+      onSearchChange={setSearch}
       searchPlaceholder="Search staff..."
       page={page}
       totalPages={totalPages}

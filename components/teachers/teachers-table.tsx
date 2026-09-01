@@ -1,15 +1,15 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import { Eye, Pencil } from "lucide-react";
-import { DataTable, useTableState, type Column } from "@/components/common/data-table";
+import { DataTable, type Column } from "@/components/common/data-table";
 import { StatusBadge } from "@/components/common/status-badge";
 import { UserAvatar } from "@/components/common/user-avatar";
 import { DateDisplay } from "@/components/common/format-display";
 import { TableSkeleton } from "@/components/common/loading-state";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { useResourceList } from "@/hooks/use-resource-list";
 import { teacherService } from "@/services/teacher.service";
 import { academicService } from "@/services/academic.service";
 import { formatPhone } from "@/lib/format";
@@ -22,26 +22,13 @@ type TeachersTableProps = {
 };
 
 export function TeachersTable({ onEdit, refreshKey = 0 }: TeachersTableProps) {
-  const { search, setSearch, page, setPage } = useTableState();
-  const [loading, setLoading] = useState(true);
-  const [teachers, setTeachers] = useState<Teacher[]>([]);
-  const [totalPages, setTotalPages] = useState(1);
+  const { data: teachers, search, setSearch, page, setPage, totalPages, isInitialLoad } =
+    useResourceList({
+      fetchFn: (params) => teacherService.getTeachers(params),
+      refreshKey,
+    });
 
   const classMap = new Map(academicService.getAllClasses().map((c) => [c.id, c.name]));
-
-  const loadTeachers = useCallback(async () => {
-    setLoading(true);
-    const result = await teacherService.getTeachers({ page, limit: 10, search });
-    if (result.success) {
-      setTeachers(result.data.data);
-      setTotalPages(result.data.totalPages);
-    }
-    setLoading(false);
-  }, [page, search, refreshKey]);
-
-  useEffect(() => {
-    loadTeachers();
-  }, [loadTeachers]);
 
   const columns: Column<Teacher>[] = [
     {
@@ -121,7 +108,7 @@ export function TeachersTable({ onEdit, refreshKey = 0 }: TeachersTableProps) {
     },
   ];
 
-  if (loading && teachers.length === 0) {
+  if (isInitialLoad) {
     return <TableSkeleton />;
   }
 
@@ -130,10 +117,7 @@ export function TeachersTable({ onEdit, refreshKey = 0 }: TeachersTableProps) {
       data={teachers}
       columns={columns}
       searchValue={search}
-      onSearchChange={(v) => {
-        setSearch(v);
-        setPage(1);
-      }}
+      onSearchChange={setSearch}
       searchPlaceholder="Search teachers..."
       page={page}
       totalPages={totalPages}

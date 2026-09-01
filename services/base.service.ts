@@ -1,12 +1,44 @@
 import type { PaginatedQuery, PaginatedResult } from "@/types/common";
 
+export type PaginateOptions = {
+  searchKeys?: string[];
+};
+
+function matchesSearch(
+  item: unknown,
+  search: string,
+  searchKeys?: string[]
+): boolean {
+  const record = item as Record<string, unknown>;
+
+  if (searchKeys?.length) {
+    return searchKeys.some((key) => {
+      const value = record[key];
+      if (value == null) return false;
+      if (typeof value === "string" || typeof value === "number") {
+        return String(value).toLowerCase().includes(search);
+      }
+      return false;
+    });
+  }
+
+  return Object.values(record).some((value) => {
+    if (value == null) return false;
+    if (typeof value === "string" || typeof value === "number") {
+      return String(value).toLowerCase().includes(search);
+    }
+    return false;
+  });
+}
+
 export async function simulateLatency(ms = 300): Promise<void> {
   await new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 export function paginate<T>(
   items: T[],
-  query: PaginatedQuery = {}
+  query: PaginatedQuery = {},
+  options: PaginateOptions = {}
 ): PaginatedResult<T> {
   const page = query.page ?? 1;
   const limit = query.limit ?? 10;
@@ -15,7 +47,7 @@ export function paginate<T>(
   if (query.search) {
     const search = query.search.toLowerCase();
     filtered = filtered.filter((item) =>
-      JSON.stringify(item).toLowerCase().includes(search)
+      matchesSearch(item, search, options.searchKeys)
     );
   }
 

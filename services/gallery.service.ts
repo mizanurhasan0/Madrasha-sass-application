@@ -9,7 +9,7 @@ let imagesStore = [...initialImages];
 export const galleryService = {
   async getAlbums(query?: PaginatedQuery) {
     await simulateLatency();
-    return success(paginate(albumsStore, query));
+    return success(paginate(albumsStore, query, { searchKeys: ["title"] }));
   },
 
   async getImages(albumId: string) {

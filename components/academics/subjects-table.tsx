@@ -1,10 +1,10 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
-import { DataTable, useTableState, type Column } from "@/components/common/data-table";
+import { DataTable, type Column } from "@/components/common/data-table";
 import { StatusBadge } from "@/components/common/status-badge";
 import { TableSkeleton } from "@/components/common/loading-state";
 import { Badge } from "@/components/ui/badge";
+import { useResourceList } from "@/hooks/use-resource-list";
 import { academicService } from "@/services/academic.service";
 import { teacherService } from "@/services/teacher.service";
 import type { Subject } from "@/types/academic";
@@ -14,27 +14,14 @@ type SubjectsTableProps = {
 };
 
 export function SubjectsTable({ refreshKey = 0 }: SubjectsTableProps) {
-  const { search, setSearch, page, setPage } = useTableState();
-  const [loading, setLoading] = useState(true);
-  const [subjects, setSubjects] = useState<Subject[]>([]);
-  const [totalPages, setTotalPages] = useState(1);
+  const { data: subjects, search, setSearch, page, setPage, totalPages, isInitialLoad } =
+    useResourceList({
+      fetchFn: (params) => academicService.getSubjects(params),
+      refreshKey,
+    });
 
   const classMap = new Map(academicService.getAllClasses().map((c) => [c.id, c.name]));
   const teacherMap = new Map(teacherService.getAll().map((t) => [t.id, t.name]));
-
-  const loadSubjects = useCallback(async () => {
-    setLoading(true);
-    const result = await academicService.getSubjects({ page, limit: 10, search });
-    if (result.success) {
-      setSubjects(result.data.data);
-      setTotalPages(result.data.totalPages);
-    }
-    setLoading(false);
-  }, [page, search, refreshKey]);
-
-  useEffect(() => {
-    loadSubjects();
-  }, [loadSubjects]);
 
   const columns: Column<Subject>[] = [
     {
@@ -75,7 +62,7 @@ export function SubjectsTable({ refreshKey = 0 }: SubjectsTableProps) {
     },
   ];
 
-  if (loading && subjects.length === 0) {
+  if (isInitialLoad) {
     return <TableSkeleton />;
   }
 
@@ -84,10 +71,7 @@ export function SubjectsTable({ refreshKey = 0 }: SubjectsTableProps) {
       data={subjects}
       columns={columns}
       searchValue={search}
-      onSearchChange={(v) => {
-        setSearch(v);
-        setPage(1);
-      }}
+      onSearchChange={setSearch}
       searchPlaceholder="Search subjects..."
       page={page}
       totalPages={totalPages}

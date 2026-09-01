@@ -21,7 +21,7 @@ export const academicService = {
 
   async getClasses(query?: PaginatedQuery) {
     await simulateLatency();
-    return success(paginate(classesStore, query));
+    return success(paginate(classesStore, query, { searchKeys: ["name"] }));
   },
 
   async getSections(classId?: string) {
@@ -32,7 +32,9 @@ export const academicService = {
 
   async getSubjects(query?: PaginatedQuery) {
     await simulateLatency();
-    return success(paginate(subjectsStore, query));
+    return success(
+      paginate(subjectsStore, query, { searchKeys: ["name", "code"] })
+    );
   },
 
   async createClass(input: Omit<Class, "id" | "madrasaId" | "studentCount">) {

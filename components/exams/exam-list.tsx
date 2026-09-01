@@ -1,14 +1,15 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useMemo } from "react";
 import Link from "next/link";
 import { ClipboardList } from "lucide-react";
 import { PageHeader } from "@/components/common/page-header";
-import { DataTable, useTableState, type Column } from "@/components/common/data-table";
+import { DataTable, type Column } from "@/components/common/data-table";
 import { StatusBadge } from "@/components/common/status-badge";
 import { DateDisplay } from "@/components/common/format-display";
 import { TableSkeleton } from "@/components/common/loading-state";
 import { Button } from "@/components/ui/button";
+import { useResourceList } from "@/hooks/use-resource-list";
 import { examService } from "@/services/exam.service";
 import { classes } from "@/data/academic";
 import type { Exam, ExamStatus } from "@/types/exam";
@@ -21,36 +22,30 @@ const statusOptions = [
 ];
 
 export function ExamList() {
-  const [loading, setLoading] = useState(true);
-  const [exams, setExams] = useState<Exam[]>([]);
-  const [totalPages, setTotalPages] = useState(1);
-  const { search, setSearch, page, setPage, filters, setFilter } = useTableState();
+  const {
+    data: fetchedExams,
+    search,
+    setSearch,
+    page,
+    setPage,
+    totalPages,
+    filters,
+    setFilter,
+    isInitialLoad,
+  } = useResourceList<Exam, { status: string }>({
+    fetchFn: (params) => examService.getExams(params),
+    initialFilters: { status: "" },
+  });
 
   const classMap = useMemo(
     () => new Map(classes.map((c) => [c.id, c.name])),
     []
   );
 
-  useEffect(() => {
-    async function load() {
-      setLoading(true);
-      const res = await examService.getExams({
-        page,
-        limit: 10,
-        search: search || undefined,
-      });
-      if (res.success) {
-        let data = res.data.data;
-        if (filters.status) {
-          data = data.filter((e) => e.status === filters.status);
-        }
-        setExams(data);
-        setTotalPages(res.data.totalPages);
-      }
-      setLoading(false);
-    }
-    load();
-  }, [page, search, filters.status]);
+  const exams = useMemo(() => {
+    if (!filters.status) return fetchedExams;
+    return fetchedExams.filter((e) => e.status === filters.status);
+  }, [fetchedExams, filters.status]);
 
   const columns: Column<Exam>[] = [
     { key: "name", header: "Exam", cell: (row) => <span className="font-medium">{row.name}</span> },
@@ -90,7 +85,7 @@ export function ExamList() {
     },
   ];
 
-  if (loading && exams.length === 0) {
+  if (isInitialLoad) {
     return (
       <div className="space-y-6">
         <PageHeader title="Exams & Results" description="Manage examinations and mark entry." />
@@ -116,10 +111,7 @@ export function ExamList() {
         columns={columns}
         searchPlaceholder="Search exams..."
         searchValue={search}
-        onSearchChange={(v) => {
-          setSearch(v);
-          setPage(1);
-        }}
+        onSearchChange={setSearch}
         filters={[
           {
             key: "status",

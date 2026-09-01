@@ -17,7 +17,9 @@ export const feeService = {
     await simulateLatency();
     let filtered = [...paymentsStore];
     if (query?.status) filtered = filtered.filter((p) => p.status === query.status);
-    return success(paginate(filtered, query));
+    return success(
+      paginate(filtered, query, { searchKeys: ["invoiceNo", "studentId"] })
+    );
   },
 
   async getDueList() {

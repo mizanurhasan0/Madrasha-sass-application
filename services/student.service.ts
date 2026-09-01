@@ -27,7 +27,9 @@ export const studentService = {
     let filtered = [...studentsStore];
     if (query?.classId) filtered = filtered.filter((s) => s.classId === query.classId);
     if (query?.status) filtered = filtered.filter((s) => s.status === query.status);
-    const result = paginate(filtered, query);
+    const result = paginate(filtered, query, {
+      searchKeys: ["name", "nameBn", "studentId", "phone"],
+    });
     return success({
       ...result,
       data: result.data.map(enrichStudent),
