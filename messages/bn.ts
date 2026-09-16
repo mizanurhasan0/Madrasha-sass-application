@@ -194,6 +194,9 @@ const bn: Messages = {
     emailPlaceholder: "you@example.com বা ০১৭১২৩৪৫৬৭৮",
     passwordPlaceholder: "আপনার পাসওয়ার্ড লিখুন",
     subtitleManage: "মাদ্রাসা পরিচালনার জন্য সাইন ইন করুন",
+    addSparkle: "একটু আলোর ঝলক ছড়ান",
+    pauseAnimation: "পটভূমির অ্যানিমেশন থামান",
+    resumeAnimation: "পটভূমির অ্যানিমেশন চালু করুন",
   },
   dashboard: {
     superAdmin: "সুপার অ্যাডমিন ড্যাশবোর্ড",

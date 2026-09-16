@@ -1,0 +1,162 @@
+.panel {
+  --pointer-x: 75%;
+  --pointer-y: 25%;
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  width: 100%;
+  min-width: 0;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow: hidden;
+  padding: 2rem 1.5rem 5.5rem;
+  background: var(--primary);
+  color: var(--primary-foreground);
+}
+
+.scenery {
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.aurora {
+  position: absolute;
+  inset: -20%;
+  background:
+    radial-gradient(ellipse at 85% 12%, color-mix(in oklch, var(--gold) 26%, transparent), transparent 45%),
+    radial-gradient(ellipse at 10% 75%, color-mix(in oklch, var(--lime) 23%, transparent), transparent 50%),
+    radial-gradient(ellipse at 90% 90%, color-mix(in oklch, var(--deep) 25%, transparent), transparent 45%);
+  animation: drift 18s ease-in-out infinite alternate;
+}
+
+.glow {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(280px circle at var(--pointer-x) var(--pointer-y), color-mix(in oklch, var(--gold) 16%, transparent), transparent 100%);
+}
+
+.grid {
+  position: absolute;
+  inset: 0;
+  opacity: 0.3;
+  background-image: radial-gradient(color-mix(in oklch, var(--primary-foreground) 35%, transparent) 0.7px, transparent 0.7px);
+  background-size: 24px 24px;
+  mask-image: linear-gradient(120deg, #000, transparent 50%, #000);
+}
+
+.rosette {
+  position: absolute;
+  width: clamp(16rem, 30vw, 29rem);
+  color: var(--primary-foreground);
+  opacity: 0.13;
+}
+
+.rosette svg {
+  width: 100%;
+  animation: orbit 100s linear infinite;
+}
+
+.rosetteTop { top: -9rem; right: -8rem; }
+.rosetteBottom { bottom: -7rem; left: -9rem; }
+.rosetteBottom svg { animation-direction: reverse; }
+
+.star {
+  position: absolute;
+  width: var(--size);
+  height: var(--size);
+  background: var(--gold);
+  clip-path: polygon(50% 0%, 62% 38%, 100% 50%, 62% 62%, 50% 100%, 38% 62%, 0% 50%, 38% 38%);
+  opacity: 0.45;
+  animation: float 7s ease-in-out var(--delay) infinite;
+}
+
+.star:nth-child(3n) { background: var(--primary-foreground); }
+
+.content {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.controls {
+  position: absolute;
+  bottom: 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0 0.25rem 0 0.5rem;
+  border: 1px solid color-mix(in oklch, var(--primary-foreground) 20%, transparent);
+  border-radius: 999px;
+  background: color-mix(in oklch, var(--primary) 85%, transparent);
+  color: var(--primary-foreground);
+}
+
+.sparkleButton, .pauseButton {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0 0.75rem;
+  border-radius: 999px;
+  font-size: 0.6875rem;
+  cursor: pointer;
+  transition: color 180ms, background 180ms;
+}
+
+.pauseButton { min-width: 44px; padding: 0; }
+.controlDivider { height: 14px; width: 1px; background: color-mix(in oklch, var(--primary-foreground) 20%, transparent); }
+.sparkleButton:hover, .pauseButton:hover { background: color-mix(in oklch, var(--primary-foreground) 12%, transparent); }
+.sparkleButton:disabled { opacity: 0.5; cursor: default; }
+.sparkleButton:focus-visible, .pauseButton:focus-visible { outline: 2px solid var(--primary-foreground); outline-offset: 3px; }
+
+.burst {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  animation: burstLifetime 1.2s ease-out forwards;
+}
+
+.ray {
+  position: absolute;
+  width: 9px;
+  height: 9px;
+  background: var(--gold);
+  border-radius: 2px;
+  animation: scatter 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.ray:nth-child(even) { background: var(--primary-foreground); width: 5px; height: 5px; }
+.panel[data-paused="true"] .scenery * { animation-play-state: paused; }
+
+@keyframes drift {
+  to { transform: translate3d(3%, -3%, 0) rotate(8deg) scale(1.08); }
+}
+
+@keyframes orbit { to { transform: rotate(360deg); } }
+
+@keyframes float {
+  0%, 100% { transform: translateY(0) rotate(0); opacity: 0.25; }
+  50% { transform: translateY(-14px) rotate(45deg); opacity: 0.65; }
+}
+
+@keyframes burstLifetime { to { opacity: 0; } }
+
+@keyframes scatter {
+  from { transform: rotate(var(--angle)) translateY(0) scale(0.5); }
+  to { transform: rotate(var(--angle)) translateY(-100px) rotate(90deg) scale(0); }
+}
+
+@media (min-width: 1024px) {
+  .panel { width: 50%; padding: 3rem 3rem 6rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .panel .scenery *, .sparkleButton, .pauseButton { animation: none; transition: none; }
+  .controls, .burst { display: none; }
+}

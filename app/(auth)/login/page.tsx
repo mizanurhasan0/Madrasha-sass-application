@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Suspense } from "react";
 import { BookOpenCheck } from "lucide-react";
 import { LoginForm } from "@/components/auth/login-form";
+import { LoginAtmosphere } from "@/components/auth/login-atmosphere";
 import { siteConfig } from "@/config/site";
 
 export const metadata: Metadata = {
@@ -29,20 +30,7 @@ export default function LoginPage() {
   return (
     <div className="flex min-h-screen flex-col lg:flex-row">
       {/* Branding panel — full width on mobile header, half screen on desktop */}
-      <div className="islamic-pattern relative flex flex-col justify-between overflow-hidden bg-primary px-6 py-8 text-primary-foreground lg:w-1/2 lg:px-12 lg:py-12">
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top_left,oklch(0.72_0.12_85/0.15),transparent_55%)]"
-        />
-        <div
-          aria-hidden
-          className="pointer-events-none absolute -right-24 -top-24 size-72 rounded-full border border-primary-foreground/10"
-        />
-        <div
-          aria-hidden
-          className="pointer-events-none absolute -bottom-16 -left-16 size-56 rotate-45 border border-primary-foreground/10"
-        />
-
+      <LoginAtmosphere>
         <div className="relative z-10">
           <Link href="/" className="inline-flex items-center gap-2.5 transition-opacity hover:opacity-90">
             <span className="flex size-10 items-center justify-center rounded-xl bg-primary-foreground/10 ring-1 ring-primary-foreground/20">
@@ -77,7 +65,7 @@ export default function LoginPage() {
         <p className="relative z-10 hidden text-xs text-primary-foreground/60 lg:block">
           © {new Date().getFullYear()} {siteConfig.name}. All rights reserved.
         </p>
-      </div>
+      </LoginAtmosphere>
 
       {/* Form panel */}
       <div className="flex flex-1 flex-col justify-center bg-background px-6 py-10 lg:px-16 lg:py-12">

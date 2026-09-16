@@ -192,6 +192,9 @@ const en = {
     emailPlaceholder: "you@example.com or 01712345678",
     passwordPlaceholder: "Enter your password",
     subtitleManage: "Sign in to manage your madrasa operations",
+    addSparkle: "Add a little sparkle",
+    pauseAnimation: "Pause background animation",
+    resumeAnimation: "Resume background animation",
   },
   dashboard: {
     superAdmin: "Super Admin Dashboard",
