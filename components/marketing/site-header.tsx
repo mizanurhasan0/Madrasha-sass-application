@@ -42,7 +42,7 @@ export function SiteHeader() {
               className={cn(
                 "rounded-lg px-3.5 py-2 text-[0.9375rem] font-medium text-deep transition-colors",
                 pathname === link.href
-                  ? "bg-sand text-primary"
+                  ? "bg-primary text-primary-foreground"
                   : "hover:bg-sand hover:text-primary"
               )}
             >
